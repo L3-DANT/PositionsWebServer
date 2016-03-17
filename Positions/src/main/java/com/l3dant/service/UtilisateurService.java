@@ -19,6 +19,7 @@ public class UtilisateurService {
 	
 	@GET
 	@Produces("application/json")
+	@Consumes("application/json")
 	public String inscription(Utilisateur u){
 		System.out.println("inscription");
 		UtilisateurDAO uDAO = new UtilisateurDAO(connectionBase());
