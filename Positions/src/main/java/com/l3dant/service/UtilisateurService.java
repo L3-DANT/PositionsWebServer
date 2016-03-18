@@ -17,30 +17,45 @@ public class UtilisateurService {
 	
 	private MongoClient m;
 	
-	@GET
+	@POST
+	@Path("/inscription")
 	@Produces("application/json")
 	@Consumes("application/json")
-	public String inscription(Utilisateur u){
+	public Utilisateur inscription(Utilisateur u){
 		System.out.println("inscription");
 		UtilisateurDAO uDAO = new UtilisateurDAO(connectionBase());
 		
-		/*Utilisateur u = new Utilisateur();
-		u.setNom("Duchenne");
-		u.setPrenom("Sébastien");
-		u.setPseudo("seb");
-		u.setMotDePasse("sebastien");
-		
-		Localisation loc = new Localisation();
-		loc.setLatitude(2.0);
-		loc.setLongitude(49.0);
-		loc.setDate("17/03/2016");
-		loc.setHeure("21:58:26");
-		
-		u.setLocalisation(loc);*/
-		
 		uDAO.inscrire(u);
+		//m.close();
+		return u;
+	}
+	
+	@GET
+	@Path("/connexion")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String connexion(Utilisateur u){
+		System.out.println("connexion");
+		UtilisateurDAO uDAO = new UtilisateurDAO(connectionBase());
+		
+		String message;
+		if(uDAO.connexion(u)){
+			message = "inscription";
+		} else {
+			message = "L'identifiant ou le mot de passe sont incorrects.";
+		}
+		
 		m.close();
-		return "inscription";
+		
+		return message;
+	}
+	
+	@GET
+	@Path("/test")
+	@Produces("text/plain")
+	public String test(){
+		System.out.println("test");
+		return "coucou";
 	}
 	
 	
