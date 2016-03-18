@@ -1,18 +1,25 @@
 package com.l3dant.dao;
 
+import org.bson.BSONObject;
+import org.bson.BasicBSONObject;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.*;
 
 public class UtilisateurDAO extends DAO<Utilisateur>{
 
-	public UtilisateurDAO(MongoDatabase mongodb) {
-		super(mongodb);
-	}
+	public UtilisateurDAO() {}
 
 	public boolean addUtilisateur(Utilisateur utilisateur){
 		
@@ -44,7 +51,8 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 	}
 	
 	public boolean inscrire(Utilisateur u){
-		getMongodb().getCollection("utilisateurs").insertOne(
+		
+		getMongoDatabase().getCollection("utilisateurs").insertOne(
 		                new Document()
 		                        .append("nom", u.getNom())
 		                        .append("prenom", u.getPrenom())
@@ -56,19 +64,21 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 	}
 	
 	public boolean connexion(Utilisateur u){
-		/*boolean connexion = false;
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("nom", u.getPseudo());
-		DBCursor cursor = collection.find(whereQuery);
-		while(cursor.hasNext()) {
-			String mdp = cursor.next();
-		    System.out.println(mdp);
-		    if(u.getMotDePasse().equals(mdp)){
-		    	connexion = true;
-		    }
+		boolean connexion = false;
+		
+		MongoClient m = new MongoClient("127.0.0.1", 27017); // changer les valeurs
+		MongoDatabase db = m.getDatabase("Positions");
+
+		MongoCollection<Document> collection = db.getCollection("utilisateurs");
+		
+		FindIterable<Document> cursor = collection.find(and(eq("pseudo", u.getPseudo()), eq("motDePasse", u.getMotDePasse())));
+		
+		if(cursor.first() == null){
+		} else {
+			connexion = true;
 		}
-		*/
-		return true;//connexion;
+		
+		return connexion;
 	}
 	
 }

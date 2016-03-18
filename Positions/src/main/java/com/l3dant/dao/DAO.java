@@ -4,10 +4,12 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 public abstract class DAO<T> {
-	private MongoDatabase mongodb;
+	private MongoClient mongo;
+	private MongoDatabase db;
 	
-	public DAO(MongoDatabase mongodb){
-		this.mongodb = mongodb;
+	public DAO(){
+		mongo = new MongoClient("127.0.0.1", 27017); // changer les valeurs
+		db = mongo.getDatabase("Positions");
 	}
 	
 	public abstract T find();
@@ -19,8 +21,10 @@ public abstract class DAO<T> {
 	public abstract boolean delete();
 	
 
-	public MongoDatabase getMongodb() {
-		return mongodb;
+	public MongoDatabase getMongoDatabase() {
+		return db;
 	}
+	
+	
 	
 }

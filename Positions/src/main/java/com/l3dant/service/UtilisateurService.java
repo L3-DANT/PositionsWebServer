@@ -23,29 +23,28 @@ public class UtilisateurService {
 	@Consumes("application/json")
 	public Utilisateur inscription(Utilisateur u){
 		System.out.println("inscription");
-		UtilisateurDAO uDAO = new UtilisateurDAO(connectionBase());
+		UtilisateurDAO uDAO = new UtilisateurDAO();
 		
 		uDAO.inscrire(u);
 		//m.close();
 		return u;
 	}
 	
-	@GET
+	@POST
 	@Path("/connexion")
-	@Produces("application/json")
+	@Produces("plain/text")
 	@Consumes("application/json")
 	public String connexion(Utilisateur u){
 		System.out.println("connexion");
-		UtilisateurDAO uDAO = new UtilisateurDAO(connectionBase());
+		UtilisateurDAO uDAO = new UtilisateurDAO();
 		
 		String message;
 		if(uDAO.connexion(u)){
-			message = "inscription";
+			message = "Vous êtes connecté.";
 		} else {
 			message = "L'identifiant ou le mot de passe sont incorrects.";
 		}
 		
-		m.close();
 		
 		return message;
 	}
@@ -58,12 +57,6 @@ public class UtilisateurService {
 		return "coucou";
 	}
 	
-	
-	public MongoDatabase connectionBase(){
-		m = new MongoClient("127.0.0.1", 27017); // changer les valeurs
-		MongoDatabase db = m.getDatabase("Positions");
-		return db;
-	}
 	
 	
 	
