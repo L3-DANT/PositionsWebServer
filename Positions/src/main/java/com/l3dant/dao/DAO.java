@@ -1,30 +1,29 @@
 package com.l3dant.dao;
 
-import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 public abstract class DAO<T> {
-	private MongoClient mongo;
-	private MongoDatabase db;
 	
-	public DAO(){
-		mongo = new MongoClient("127.0.0.1", 27017); // changer les valeurs
-		db = mongo.getDatabase("Positions");
+	private MongoDatabase mongoDatabase;
+	
+	public DAO(MongoDatabase mongoDatabase){
+		this.mongoDatabase = mongoDatabase;
 	}
 	
-	public abstract T find();
+	public abstract T find(T t);
 	
-	public abstract boolean create();
+	public abstract boolean create(T t);
 	
-	public abstract boolean update();
+	public abstract boolean update(T t);
 	
-	public abstract boolean delete();
-	
+	public abstract boolean delete(T t);
 
 	public MongoDatabase getMongoDatabase() {
-		return db;
+		return mongoDatabase;
 	}
-	
-	
-	
+
+	public void setMongoDatabase(MongoDatabase mongoDatabase) {
+		this.mongoDatabase = mongoDatabase;
+	}
+
 }

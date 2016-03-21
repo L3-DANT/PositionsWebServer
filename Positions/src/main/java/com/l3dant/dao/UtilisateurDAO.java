@@ -1,84 +1,87 @@
 package com.l3dant.dao;
 
-import org.bson.BSONObject;
-import org.bson.BasicBSONObject;
+import org.bson.BSON;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
+import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
 import static com.mongodb.client.model.Filters.*;
 
 public class UtilisateurDAO extends DAO<Utilisateur>{
 
-	public UtilisateurDAO() {}
-
-	public boolean addUtilisateur(Utilisateur utilisateur){
-		
-		return true;
-	}
-
-	@Override
-	public Utilisateur find() {
-
-		return null;
-	}
-
-	@Override
-	public boolean create() {
-
-		return false;
-	}
-
-	@Override
-	public boolean update() {
-
-		return false;
-	}
-
-	@Override
-	public boolean delete() {
-
-		return false;
+	private MongoCollection<Document> collUtilisateurs;
+	
+	public UtilisateurDAO(MongoDatabase mongoDatabase) {
+		super(mongoDatabase);
+		collUtilisateurs = getMongoDatabase().getCollection("utilisateurs");
 	}
 	
-	public boolean inscrire(Utilisateur u){
-		
-		getMongoDatabase().getCollection("utilisateurs").insertOne(
-		                new Document()
-		                        .append("nom", u.getNom())
-		                        .append("prenom", u.getPrenom())
-		                        .append("pseudo", u.getPseudo())
-		                        .append("motDePasse", u.getMotDePasse())
-		                        .append("localisation", null));
-		
-		return true;
-	}
-	
-	public boolean connexion(Utilisateur u){
-		boolean connexion = false;
-		
-		MongoClient m = new MongoClient("127.0.0.1", 27017); // changer les valeurs
-		MongoDatabase db = m.getDatabase("Positions");
-
-		MongoCollection<Document> collection = db.getCollection("utilisateurs");
-		
-		FindIterable<Document> cursor = collection.find(and(eq("pseudo", u.getPseudo()), eq("motDePasse", u.getMotDePasse())));
-		
-		if(cursor.first() == null){
-		} else {
-			connexion = true;
+	@Override
+	public Utilisateur find(Utilisateur u) {
+		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", u.getPseudo()));
+		Utilisateur ut = null;
+		if(result.first() == null){
+			return null;
 		}
 		
-		return connexion;
+		ut = new Utilisateur();
+		ut.setNom(result.first().getString("nom"));
+		ut.setPrenom(result.first().getString("prenom"));
+		ut.setPseudo(result.first().getString("pseudo"));
+		ut.setMotDePasse(result.first().getString("motDePasse"));
+		
+		Document doc = (Document)result.first().get("localisation");
+
+		if(doc != null){
+			Localisation loc = new Localisation();
+			loc.setLatitude(doc.getDouble("latitude"));
+			loc.setLatitude(doc.getDouble("longitude"));
+			loc.setDate(doc.getString("date"));
+			loc.setHeure(doc.getString("heure"));
+			ut.setLocalisation(loc);
+		}
+		return ut;
+	}
+	
+	@Override
+	public boolean create(Utilisateur u) {
+		collUtilisateurs.insertOne(
+				new Document()
+                .append("nom", u.getNom())
+                .append("prenom", u.getPrenom())
+                .append("pseudo", u.getPseudo())
+                .append("motDePasse", u.getMotDePasse())
+                .append("localisation", null));
+		return true;
+	}
+
+	@Override
+	public boolean update(Utilisateur u) {
+		collUtilisateurs.findOneAndUpdate(
+				eq("pseudo", u.getPseudo()),
+				new Document("$set", new Document("nom", u.getNom()))
+					.append("$set", new Document("prenom", u.getPrenom()))
+					.append("$set", new Document("motDePasse", u.getMotDePasse()))
+					.append("$set", new Document("localisation", 
+										new Document("latitude", u.getLocalisation().getLatitude())
+										.append("longitude", u.getLocalisation().getLongitude())
+										.append("date", u.getLocalisation().getDate())
+										.append("heure", u.getLocalisation().getHeure())
+										)
+					)
+                );
+		
+		return false;
+	}
+
+	@Override
+	public boolean delete(Utilisateur u) {
+
+		return false;
 	}
 	
 }
