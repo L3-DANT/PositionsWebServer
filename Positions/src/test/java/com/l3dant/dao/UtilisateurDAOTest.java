@@ -39,7 +39,7 @@ public class UtilisateurDAOTest {
 		u.setPseudo("pseudoTest");
 		u.setMotDePasse("motDePasseTest");
 		
-		uDAO = new UtilisateurDAO(mongoDatabase);
+		//uDAO = new UtilisateurDAO(mongoDatabase);
 	}
 	
 	@Before
