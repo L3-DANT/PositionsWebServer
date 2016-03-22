@@ -1,6 +1,5 @@
 package com.l3dant.bean;
 
-import javax.xml.bind.annotation.XmlRootElement;
 
 public class Contact {
 	private String nom;
