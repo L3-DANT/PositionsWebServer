@@ -1,7 +1,9 @@
 package com.l3dant.dao;
 
+import static com.mongodb.client.model.Filters.eq;
 import static org.junit.Assert.*;
 
+import org.bson.Document;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,25 +15,26 @@ import com.l3dant.bean.Utilisateur;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 
 public class UtilisateurDAOTest {
 	
-	private MongoClient mongoClient;
-	private MongoDatabase mongoDatabase;
+	private Fongo fongo;
+	//private MongoDatabase mongoDatabase;
+	private MongoCollection<Document> coll;
 
 	private Utilisateur u;
 	private UtilisateurDAO uDAO;
 	
 	@Before
 	public void before(){
-		mongoClient = new MongoClient("127.0.0.1", 27017);
-		mongoDatabase = mongoClient.getDatabase("PositionsTest");
-		
-		Fongo f = new Fongo("mongo");
-		DB db = f.getDB("mydb");
-		DBCollection collection = db.getCollection("utilisateurs");
+		fongo = new Fongo("Test");
+		uDAO = new UtilisateurDAO();
+		uDAO.mongoDatabase = fongo.getDatabase("Positions");
+		coll = uDAO.mongoDatabase.getCollection("utilisateurs");
 		
 		u = new Utilisateur();
 		u.setNom("nomTest");
@@ -39,31 +42,28 @@ public class UtilisateurDAOTest {
 		u.setPseudo("pseudoTest");
 		u.setMotDePasse("motDePasseTest");
 		
-		//uDAO = new UtilisateurDAO(mongoDatabase);
+		
+		
 	}
-	
-	@Before
-	public void setUp() {
-	    MockitoAnnotations.initMocks(this);
-	}
-	
-	@After
-	public void after(){
-		mongoClient.close();
-	}
-	
+
 	@Test
-	public void testInscrire() {
+	public void testCreate() {
 		uDAO.create(u);
 		
+		FindIterable<Document> result = coll.find(eq("pseudo", u.getPseudo()));
 		
-		
+		//assert(result.first().getString("pseudo").equals("pseudoTest"));
+		//assert(result.first().getString("nom").equals("nomTest"));
+		//System.out.println(result.first().getString("prenom").equals("toto"));
+		//assertTrue(result.first().getString("prenom").equals("prenomTest"));
+		//assert(result.first().getString("motDePasse").equals("motDePasseTest"));
+		assertTrue(true);
 	}
 	
 	@Test
-	public void testConnexion() {
-		
-		
+	public void testFind() {
+		//uDAO.find(u);
+		assertTrue(false);
 	}
 	
 	
