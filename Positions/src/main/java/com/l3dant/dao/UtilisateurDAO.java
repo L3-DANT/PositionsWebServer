@@ -1,13 +1,13 @@
 package com.l3dant.dao;
 
-import org.bson.BSON;
+
 import org.bson.Document;
 
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -15,9 +15,8 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 
 	private MongoCollection<Document> collUtilisateurs;
 	
-	public UtilisateurDAO(MongoDatabase mongoDatabase) {
-		super(mongoDatabase);
-		collUtilisateurs = getMongoDatabase().getCollection("utilisateurs");
+	public UtilisateurDAO() {
+		collUtilisateurs = mongoDatabase.getCollection("utilisateurs");
 	}
 	
 	@Override
