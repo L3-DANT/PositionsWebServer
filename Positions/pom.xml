@@ -83,7 +83,6 @@
 					<fork>true</fork>
 					<source>1.8</source>
 					<target>1.8</target>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
         </plugin>
     </plugins>
