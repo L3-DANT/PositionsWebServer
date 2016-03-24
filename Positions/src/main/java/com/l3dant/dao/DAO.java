@@ -1,26 +1,13 @@
 package com.l3dant.dao;
 
-import com.mongodb.client.MongoDatabase;
+public interface DAO<T> {
 
-public abstract class DAO<T> {
+	T find(String name);
 	
-	MongoDatabase mongoDatabase = ConnexionMongo.getDatabase();
+	T create(T t);
 	
+	T update(T t);
+	
+	boolean delete(T t);
 
-	public abstract T find(T t);
-	
-	public abstract boolean create(T t);
-	
-	public abstract boolean update(T t);
-	
-	public abstract boolean delete(T t);
-	/*
-	public MongoDatabase getMongoDatabase() {
-		return mongoDatabase;
-	}
-
-	public void setMongoDatabase(MongoDatabase mongoDatabase) {
-		this.mongoDatabase = mongoDatabase;
-	}
-	*/
 }
