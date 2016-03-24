@@ -2,6 +2,7 @@ package com.l3dant.service;
 
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -45,6 +46,15 @@ public class UtilisateurService {
 		} else {
 			return false;
 		}
+	}
+	
+	@DELETE
+	@Path("/suppression")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public boolean supprimerCompte(Utilisateur u){
+		System.out.println("supprimer");
+		return uDAO.delete(u);
 	}
 	
 	@GET

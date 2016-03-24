@@ -79,8 +79,8 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 
 	@Override
 	public boolean delete(Utilisateur u) {
-
-		return false;
+		collUtilisateurs.deleteOne(eq("pseudo", u.getPseudo()));
+		return true;
 	}
 	
 }
