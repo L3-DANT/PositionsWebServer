@@ -4,20 +4,13 @@ import static com.mongodb.client.model.Filters.eq;
 import static org.junit.Assert.*;
 
 import org.bson.Document;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 
 import com.github.fakemongo.Fongo;
 import com.l3dant.bean.Utilisateur;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 
 
 public class UtilisateurDAOTest {

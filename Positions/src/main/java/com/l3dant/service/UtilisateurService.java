@@ -22,7 +22,7 @@ public class UtilisateurService {
 	@Consumes("application/json")
 	public boolean inscription(Utilisateur u){
 		System.out.println("inscription");
-		
+
 		if(uDAO.find(u) == null){ 
 			uDAO.create(u);
 			return true;
