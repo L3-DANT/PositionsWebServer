@@ -12,18 +12,18 @@ import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
 
 @Path("/utilisateur")
+@Produces("application/json")
+@Consumes("application/json")
 public class UtilisateurService {
 	
 	private static DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
 	
 	@POST
 	@Path("/inscription")
-	@Produces("application/json")
-	@Consumes("application/json")
 	public boolean inscription(Utilisateur u){
 		System.out.println("inscription");
 		
-		if(uDAO.find(u) == null){ 
+		if(uDAO.find(u.getPseudo()) == null){
 			uDAO.create(u);
 			return true;
 		}
@@ -32,34 +32,19 @@ public class UtilisateurService {
 	
 	@POST
 	@Path("/connexion")
-	@Produces("application/json")
-	@Consumes("application/json")
 	public boolean connexion(Utilisateur u){
 		System.out.println("connexion");
 		
-		Utilisateur ut = uDAO.find(u);
-		
-		
-		if(ut != null && u.getPseudo().equals(ut.getPseudo()) && u.getMotDePasse().equals(ut.getMotDePasse())){
-			return true;
-		} else {
+		Utilisateur ut = uDAO.find(u.getPseudo());
+
+		if (ut == null) {
 			return false;
 		}
-	}
-	
-	@GET
-	@Path("/test")
-	@Produces("plain/text")
-	@Consumes("application/json")
-	public String test(){
-		System.out.println("test");
-		return "coucou";
+		return ut.equals(u);
 	}
 	
 	@POST
 	@Path("/test")
-	@Produces("application/json")
-	@Consumes("application/json")
 	public boolean test(Utilisateur u){
 		System.out.println("test"+u.getNom());
 		u.setNom("bcb");
