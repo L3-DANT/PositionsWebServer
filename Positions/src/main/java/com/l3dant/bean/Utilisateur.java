@@ -1,17 +1,21 @@
 package com.l3dant.bean;
 
+import java.util.List;
+
 public class Utilisateur {
 	private String nom;
 	private String prenom;
 	private String pseudo;
 	private String motDePasse;
 	private Localisation localisation;
-	
+	private List<Utilisateur> contacts;
+	private String token;
 	
 	public String getNom() {
 		return nom;
 	}
 	
+
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
@@ -46,6 +50,24 @@ public class Utilisateur {
 	
 	public void setLocalisation(Localisation localisation) {
 		this.localisation = localisation;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	
+	public List<Utilisateur> getContacts() {
+		return contacts;
+	}
+
+
+	public void setContacts(List<Utilisateur> contacts) {
+		this.contacts = contacts;
 	}
 
 
