@@ -12,6 +12,8 @@ import com.mongodb.client.MongoCollection;
 
 import static com.mongodb.client.model.Filters.*;
 
+import java.util.ArrayList;
+
 public class UtilisateurDAO implements DAO<Utilisateur>{
 
 	private final MongoCollection<Document> collUtilisateurs;
@@ -56,7 +58,9 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("pseudo", u.getPseudo())
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
+                .append("contacts", null)
                 .append("localisation", null));
+		
 		return u;
 	}
 

@@ -22,28 +22,23 @@ public class UtilisateurService {
 	
 	@POST
 	@Path("/inscription")
-	public boolean inscription(Utilisateur u){
+	public Utilisateur inscription(Utilisateur u){
 		System.out.println("inscription");
 		
 		if(uDAO.find(u.getPseudo()) == null){
 			u.setToken(RandomStringUtils.random(32, true, true));
 			uDAO.create(u);
-			return true;
+			return u;
 		}
-		return false;
+		return null;
 	}
 	
 	@POST
 	@Path("/connexion")
-	public boolean connexion(Utilisateur u){
+	public Utilisateur connexion(Utilisateur u){
 		System.out.println("connexion");
-		
 		Utilisateur ut = uDAO.find(u.getPseudo());
-
-		if (ut == null) {
-			return false;
-		}
-		return true;
+		return ut; //ut peut être null
 	}
 	
 	@DELETE
