@@ -1,6 +1,7 @@
 package com.l3dant.dao;
 
 
+import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import com.l3dant.bean.Localisation;
@@ -11,29 +12,29 @@ import com.mongodb.client.MongoCollection;
 
 import static com.mongodb.client.model.Filters.*;
 
-public class UtilisateurDAO extends DAO<Utilisateur>{
+public class UtilisateurDAO implements DAO<Utilisateur>{
 
-	private MongoCollection<Document> collUtilisateurs;
+	private final MongoCollection<Document> collUtilisateurs;
 	
 	public UtilisateurDAO() {
-		collUtilisateurs = mongoDatabase.getCollection("utilisateurs");
+		collUtilisateurs = ConnexionMongo.getDatabase().getCollection("utilisateurs");
 	}
 	
 	@Override
-	public Utilisateur find(Utilisateur u) {
-		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", u.getPseudo()));
-		Utilisateur ut = null;
-		if(result.first() == null){
+	public Utilisateur find(String name) {
+		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", name));
+		Document document = result.first();
+		if(document == null){
 			return null;
 		}
+
+		Utilisateur ut = new Utilisateur();
+		ut.setNom(document.getString("nom"));
+		ut.setPrenom(document.getString("prenom"));
+		ut.setPseudo(document.getString("pseudo"));
+		ut.setMotDePasse(document.getString("motDePasse"));
 		
-		ut = new Utilisateur();
-		ut.setNom(result.first().getString("nom"));
-		ut.setPrenom(result.first().getString("prenom"));
-		ut.setPseudo(result.first().getString("pseudo"));
-		ut.setMotDePasse(result.first().getString("motDePasse"));
-		
-		Document doc = (Document)result.first().get("localisation");
+		Document doc = (Document) document.get("localisation");
 
 		if(doc != null){
 			Localisation loc = new Localisation();
@@ -47,19 +48,20 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 	}
 	
 	@Override
-	public boolean create(Utilisateur u) {
+	public Utilisateur create(Utilisateur u) {
 		collUtilisateurs.insertOne(
 				new Document()
                 .append("nom", u.getNom())
                 .append("prenom", u.getPrenom())
                 .append("pseudo", u.getPseudo())
                 .append("motDePasse", u.getMotDePasse())
+                .append("token", u.getToken())
                 .append("localisation", null));
-		return true;
+		return u;
 	}
 
 	@Override
-	public boolean update(Utilisateur u) {
+	public Utilisateur update(Utilisateur u) {
 		collUtilisateurs.findOneAndUpdate(
 				eq("pseudo", u.getPseudo()),
 				new Document("$set", new Document("nom", u.getNom()))
@@ -74,7 +76,7 @@ public class UtilisateurDAO extends DAO<Utilisateur>{
 					)
                 );
 		
-		return false;
+		return u;
 	}
 
 	@Override
