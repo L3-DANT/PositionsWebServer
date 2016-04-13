@@ -59,7 +59,11 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
                 .append("contacts", null)
-                .append("localisation", null));
+                .append("localisation", new Document().append("Latitude", null)
+                									  .append("Longitude", null)
+                									  .append("Date", null)
+                									  .append("heure", null))
+                );
 		
 		return u;
 	}

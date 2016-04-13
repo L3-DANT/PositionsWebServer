@@ -52,13 +52,11 @@ public class UtilisateurService {
 	
 	
 	@POST
-	@Path("/test")
-	public boolean test(Utilisateur u){
-		System.out.println("test"+u.getNom());
-		u.setNom("bcb");
-		u.setPrenom("iuyt");
-		System.out.println("test"+u.getNom());
-		uDAO.update(u);
+	@Path("/testLoc")
+	public boolean test(Localisation u){
+		System.out.println("testLoc");
+		System.out.println("lat : " + u.getLatitude() + ", long : "+ u.getLongitude());
+		
 		return true;
 	}
 	
