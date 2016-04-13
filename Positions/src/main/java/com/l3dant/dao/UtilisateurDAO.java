@@ -1,11 +1,12 @@
 package com.l3dant.dao;
 
 
-import com.mongodb.client.MongoDatabase;
+
 import org.bson.Document;
 
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
@@ -13,6 +14,10 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+
 
 public class UtilisateurDAO implements DAO<Utilisateur>{
 
@@ -48,6 +53,33 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 			ut.setLocalisation(loc);
 		}
 		return ut;
+	}
+	
+	public List<Utilisateur> findViaPrefix(String prefix){
+		ArrayList<Utilisateur> newFriends = new ArrayList<Utilisateur>();
+		BasicDBObject query = new BasicDBObject();
+		
+		//On enlève certains caractere dechappement (espaces, tabulation et sauts de ligne) du prefix
+		//attention string immutable
+		prefix = prefix.replaceAll("\r", "");
+		prefix = prefix.replaceAll("\t", "");
+		prefix = prefix.replaceAll("\\s+", ""); //Un espace ou plus
+		prefix = prefix.replaceAll("\n", "");
+		
+		Pattern p = Pattern.compile("^" + prefix, Pattern.CASE_INSENSITIVE); //Regex pour trouver tous les mots ayant ce prefixe, sans prendre en compte la casse
+		System.out.println(p);
+		query.put("pseudo", p);
+		FindIterable<Document> result = collUtilisateurs.find(query);
+		
+		
+		for(Document doc : result){
+			Utilisateur u = new Utilisateur();
+			u.setPseudo(doc.getString("pseudo"));
+			newFriends.add(u);
+		}
+		System.out.println(newFriends);
+		
+		return newFriends;
 	}
 	
 	@Override
