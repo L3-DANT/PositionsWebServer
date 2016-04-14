@@ -1,6 +1,8 @@
 package com.l3dant.service;
 
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
@@ -12,6 +14,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.l3dant.bean.*;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
+import com.l3dant.dao.UtilisateurDAO;
 
 @Path("/utilisateur")
 @Produces("application/json")
@@ -40,6 +43,15 @@ public class UtilisateurService {
 		Utilisateur ut = uDAO.find(u.getPseudo());
 		return ut; //ut peut être null
 	}
+	
+	@POST
+	@Path("/recherche")
+	@Consumes("text/plain")
+	@Produces("application/json")
+	public List<Utilisateur> rechercheUsers(String prefix){
+		return ((UtilisateurDAO)uDAO).findViaPrefix(prefix);
+	}
+	
 	
 	@DELETE
 	@Path("/suppression")
