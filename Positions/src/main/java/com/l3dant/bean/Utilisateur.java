@@ -9,7 +9,8 @@ public class Utilisateur {
 	private String pseudo;
 	private String motDePasse;
 	private Localisation localisation;
-	private List<Utilisateur> contacts;
+	private List<Contact> contacts;
+	private List<Invitation> invits;
 	private String token;
 	
 	public String getNom() {
@@ -69,12 +70,12 @@ public class Utilisateur {
 	}
 	
 	
-	public List<Utilisateur> getContacts() {
+	public List<Contact> getContacts() {
 		return contacts;
 	}
 
 
-	public void setContacts(List<Utilisateur> contacts) {
+	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
 
