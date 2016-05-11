@@ -1,7 +1,7 @@
 package com.l3dant.dao;
 
 
-import com.mongodb.client.MongoDatabase;
+
 import org.bson.Document;
 
 import com.l3dant.bean.Localisation;
@@ -12,7 +12,7 @@ import com.mongodb.client.MongoCollection;
 
 import static com.mongodb.client.model.Filters.*;
 
-import java.util.ArrayList;
+
 
 public class UtilisateurDAO implements DAO<Utilisateur>{
 
