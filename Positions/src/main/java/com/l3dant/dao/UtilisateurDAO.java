@@ -41,8 +41,9 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 
 		if(doc != null){
 			Localisation loc = new Localisation();
+
+			loc.setLongitude(doc.getDouble("longitude"));
 			loc.setLatitude(doc.getDouble("latitude"));
-			loc.setLatitude(doc.getDouble("longitude"));
 			loc.setDate(doc.getString("date"));
 			loc.setHeure(doc.getString("heure"));
 			ut.setLocalisation(loc);
@@ -61,10 +62,10 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
                 .append("contacts", null)
-                .append("localisation", new Document().append("Latitude", null)
-                									  .append("Longitude", null)
-                									  .append("Date", null)
-                									  .append("heure", null))
+                .append("localisation", new Document().append("latitude", 0.0)
+                									  .append("longitude", 0.0)
+                									  .append("date", "")
+                									  .append("heure", ""))
                 );
 		
 		return u;

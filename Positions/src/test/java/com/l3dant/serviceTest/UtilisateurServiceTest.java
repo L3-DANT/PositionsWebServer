@@ -17,7 +17,7 @@ import com.l3dant.dao.UtilisateurDAO;
 
 public class UtilisateurServiceTest {
 
-	//@Mock
+	@Mock
 	private Utilisateur u;
 	
 	@Before
