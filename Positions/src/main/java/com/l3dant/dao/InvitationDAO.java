@@ -22,18 +22,24 @@ public class InvitationDAO implements DAO<Invitation>{
 		return null;
 	}
 	
+	
+	public Invitation find(String demandeur, String concerne) {
+		
+		return null;
+	}
+	
+	
 	//On crée la nouvelle invitation sur les listes des deux utilisateurs concernés
 	@Override
 	public Invitation create(Invitation i) {
 		
 		collUser.findOneAndUpdate(
 				eq("pseudo", i.getDemandeur()),
-				new Document("$push", new Document("invits", asList( new Document("demandeur", i.getDemandeur())
+				new Document("$push", new Document("invits", new Document("demandeur", i.getDemandeur())
 						.append("concerne", i.getConcerne())
 						.append("date", i.getDate())
 						.append("accept", i.getAccept())
-						)
-					)
+						)					
 				)		
 		);
 		
@@ -73,7 +79,7 @@ public class InvitationDAO implements DAO<Invitation>{
 
 	@Override
 	public Invitation update(Invitation t) {
-		/*collInvitation.findOneAndUpdate(
+		/*collUser.findOneAndUpdate(
 				eq("pseudo", t.getDemandeur()),
 				new Document("$set", new Document("demandeur", i.getDemandeur()))
 					.append("$set", new Document("concerne", i.getConcerne()))
@@ -86,7 +92,7 @@ public class InvitationDAO implements DAO<Invitation>{
 										.append("heure", u.getLocalisation().getHeure())
 										)
 					)
-                );
+        );
 		
 		insertOne(
 				new Document()
@@ -101,7 +107,15 @@ public class InvitationDAO implements DAO<Invitation>{
 	}
 
 	@Override
-	public boolean delete(Invitation t) {
+	//Delete sert uniquement pour supprimer chez le demandeur
+	public boolean delete(Invitation i) {
+		collUser.findOneAndUpdate(
+				eq("pseudo", i.getDemandeur()),
+				new Document("$pull", new Document("invits", new Document("demandeur", i.getDemandeur())
+						.append("concerne", i.getConcerne())
+					)
+				)			
+		);
 		return false;
 	}
 

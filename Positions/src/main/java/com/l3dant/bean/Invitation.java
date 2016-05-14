@@ -8,13 +8,17 @@ public class Invitation {
 	private String date;
 	private StatutInvit accept;
 	
+	public Invitation(){}
+	
 	public Invitation(String demandeur, String concerne, String date){
 		this.demandeur = demandeur;
 		this.concerne = concerne;
 		this.date = date;
 		this.accept = StatutInvit.EN_ATTENTE;
 	}
-
+	
+	
+	
 	public String getDemandeur() {
 		return demandeur;
 	}

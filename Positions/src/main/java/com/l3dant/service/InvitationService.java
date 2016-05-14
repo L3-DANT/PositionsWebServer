@@ -35,13 +35,30 @@ public class InvitationService {
 		String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 		Invitation i = new Invitation(demandeur, concerne, date);
 		
-		return iDAO.create(i);
+		//if(iDAO.find(demandeur, concerne) == null)
+			return iDAO.create(i);
+		
+		//return null;
 		
 		//return new Gson().toJson(iDAO.update(i));
 	}
 	
+	//A la fin de l'acceptation ou du refus on supprime l'invitation du côté de l'invité
 	public void accepterInvit(Invitation i){
 		
+		
+	}
+	
+	public void refusInvit(Invitation i){
+		
+	}
+	
+	//On supprime l'invit du côté de celui qui a fait la demande
+	@Path("/supprInvit")
+	@POST
+	public boolean supprInvit(Invitation i){
+		iDAO.delete(i);
+		return true;
 	}
 	
 }
