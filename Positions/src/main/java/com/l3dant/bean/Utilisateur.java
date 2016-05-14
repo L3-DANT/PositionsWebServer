@@ -2,7 +2,11 @@ package com.l3dant.bean;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 public class Utilisateur {
+	private ObjectId id;
+	
 	private String nom;
 	private String prenom;
 	private String mail;
@@ -20,6 +24,15 @@ public class Utilisateur {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+	
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
 	
 	public String getPrenom() {
 		return prenom;

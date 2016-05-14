@@ -3,6 +3,7 @@ package com.l3dant.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -51,11 +52,10 @@ public class UtilisateurService {
 	}
 	
 	
-	@POST
-	@Path("/testLoc")
-	public boolean test(Localisation u){
+	@GET
+	@Path("/test")
+	public boolean test(){
 		System.out.println("testLoc");
-		System.out.println("lat : " + u.getLatitude() + ", long : "+ u.getLongitude());
 		
 		return true;
 	}

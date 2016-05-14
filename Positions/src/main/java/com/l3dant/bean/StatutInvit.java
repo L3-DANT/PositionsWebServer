@@ -1,5 +1,6 @@
 package com.l3dant.bean;
 
-public enum StatutInvit {
+
+public enum StatutInvit{
 	ACCEPTEE, EN_ATTENTE, REFUSEE 
 }

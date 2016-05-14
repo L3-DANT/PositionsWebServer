@@ -4,6 +4,7 @@ package com.l3dant.dao;
 
 import org.bson.Document;
 
+import com.l3dant.bean.Invitation;
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.client.FindIterable;
@@ -11,6 +12,8 @@ import com.mongodb.client.MongoCollection;
 
 
 import static com.mongodb.client.model.Filters.*;
+
+import java.util.ArrayList;
 
 
 
@@ -31,6 +34,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		}
 
 		Utilisateur ut = new Utilisateur();
+		ut.setId(document.getObjectId("_id"));
 		ut.setNom(document.getString("nom"));
 		ut.setPrenom(document.getString("prenom"));
 		ut.setPseudo(document.getString("pseudo"));
@@ -41,6 +45,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 
 		if(doc != null){
 			Localisation loc = new Localisation();
+			
 			loc.setLatitude(doc.getDouble("latitude"));
 			loc.setLatitude(doc.getDouble("longitude"));
 			loc.setDate(doc.getString("date"));
@@ -61,6 +66,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
                 .append("contacts", null)
+                .append("invits", new ArrayList<>())
                 .append("localisation", new Document().append("Latitude", null)
                 									  .append("Longitude", null)
                 									  .append("Date", null)
