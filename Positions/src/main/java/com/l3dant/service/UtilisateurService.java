@@ -17,8 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.l3dant.bean.*;
@@ -82,11 +80,7 @@ public class UtilisateurService {
 		return true;
 	}
 	
-	@GET
-	@Path("/test")
-	public String test(){
-		return "test ok";
-	}
+	
 	
 	@POST
 	@Path("/uploadImg")

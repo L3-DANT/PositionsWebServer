@@ -97,6 +97,14 @@ public class Utilisateur {
 	}
 	
 	
+	public List<Invitation> getInvits() {
+		return invits;
+	}
+
+	public void setInvits(List<Invitation> invits) {
+		this.invits = invits;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

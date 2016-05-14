@@ -19,6 +19,22 @@ public class Invitation {
 	
 	
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setDemandeur(String demandeur) {
+		this.demandeur = demandeur;
+	}
+
+	public void setConcerne(String concerne) {
+		this.concerne = concerne;
+	}
+
 	public String getDemandeur() {
 		return demandeur;
 	}
@@ -31,9 +47,18 @@ public class Invitation {
 		return accept.toString();
 	}
 	
+	public void setAccept(String accept) {
+		if(accept.equals("ACCEPTEE"))
+			this.accept = StatutInvit.ACCEPTEE;
+		else if(accept.equals("REFUSEE") )
+			this.accept = StatutInvit.REFUSEE;
+		else
+			this.accept = StatutInvit.EN_ATTENTE;
+	}
+	/*
 	public void setAccept(StatutInvit accept) {
 		this.accept = accept;
-	}
+	}*/
 	
 	public String getDate() {
 		return date;

@@ -1,6 +1,8 @@
 package com.l3dant.dao;
 
 import org.bson.Document;
+
+import com.l3dant.bean.Invitation;
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.BasicDBObject;
@@ -35,7 +37,16 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		ut.setPseudo(document.getString("pseudo"));
 		ut.setMotDePasse(document.getString("motDePasse"));
 		ut.setMail(document.getString("mail"));
-		
+		/*List<Invitation> invitations= new ArrayList<Invitation>();
+		for(Document d : (List<Document>)document.get("invits")){
+			Invitation i = new Invitation();
+			i.setDemandeur(d.getString("demandeur"));
+			i.setConcerne(d.getString("concerne"));
+			i.setDate(d.getString("date"));
+			//i.setAccept(d.getString("accept"));
+			invitations.add(i);
+		}
+		ut.setInvits(invitations);*/
 		Document doc = (Document) document.get("localisation");
 
 		if(doc != null){

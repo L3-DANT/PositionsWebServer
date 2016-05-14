@@ -1,8 +1,13 @@
 package com.l3dant.dao;
 
 import static com.mongodb.client.model.Filters.eq;
+
+import java.util.List;
+
 import org.bson.Document;
 import com.l3dant.bean.Invitation;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 public class InvitationDAO implements DAO<Invitation>{
@@ -18,10 +23,20 @@ public class InvitationDAO implements DAO<Invitation>{
 		return null;
 	}
 	
-	
-	public Invitation find(String demandeur, String concerne) {
+	//pour vérifier si l'invitation n'existe pas déjà, renvoie true si elle existe déjà
+	public boolean find(String demandeur, String concerne) {
+		System.out.println(demandeur);
+		FindIterable<Document> result = collUser.find(eq("pseudo", demandeur));
+		Document document = result.first();
 		
-		return null;
+		//On récupère les invitations sous forme de liste de document
+		List<Document> invitations = (List<Document>)document.get("invits");
+		for(Document invitation : invitations){
+			if(invitation.get("concerne").toString().compareTo(concerne) == 0)
+				return true;
+		}
+		
+		return false;
 	}
 	
 	

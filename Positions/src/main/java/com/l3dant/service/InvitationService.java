@@ -12,6 +12,7 @@ import com.l3dant.bean.Invitation;
 import com.l3dant.bean.StatutInvit;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
+import com.l3dant.dao.InvitationDAO;
 
 @Path("/invitation")
 @Produces("application/json")
@@ -24,16 +25,13 @@ public class InvitationService {
 	@Path("/inviteFriend")
 	@POST
 	public Invitation inviterAmi(@QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
-		System.out.println(demandeur);
-		System.out.println(concerne);
 		String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 		Invitation i = new Invitation(demandeur, concerne, date);
-		
-		//if(iDAO.find(demandeur, concerne) == null)
+		System.out.println(((InvitationDAO)iDAO).find(demandeur, concerne));
+		if(!((InvitationDAO)iDAO).find(demandeur, concerne))
 			return iDAO.create(i);
 		
-		//return null;
-		
+		return null;		
 		//return new Gson().toJson(iDAO.update(i));
 	}
 	
@@ -46,9 +44,11 @@ public class InvitationService {
 		System.out.println(b);
 		System.out.println(i.getDemandeur());
 		if(b)
-			i.setAccept(StatutInvit.ACCEPTEE);
+			//i.setAccept(StatutInvit.ACCEPTEE);
+			i.setAccept("ACCEPTEE");
 		else
-			i.setAccept(StatutInvit.REFUSEE);
+			//i.setAccept(StatutInvit.REFUSEE);
+			i.setAccept("REFUSEE");//
 		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		iDAO.update(i);
 	}
