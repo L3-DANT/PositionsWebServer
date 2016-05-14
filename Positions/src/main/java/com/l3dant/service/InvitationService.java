@@ -8,16 +8,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
-import org.bson.Document;
-
-import com.google.gson.Gson;
 import com.l3dant.bean.Invitation;
-import com.l3dant.bean.Utilisateur;
-import com.l3dant.dao.ConnexionMongo;
+import com.l3dant.bean.StatutInvit;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
-import com.mongodb.client.MongoCollection;
 
 @Path("/invitation")
 @Produces("application/json")
@@ -44,16 +38,25 @@ public class InvitationService {
 	}
 	
 	//A la fin de l'acceptation ou du refus on supprime l'invitation du côté de l'invité
-	public void accepterInvit(Invitation i){
-		
-		
+	//On change la date à la date d'acceptation ou refus pour la notifier au demandeur
+	//Dans la partie iOS on envoie que le demandeur et l'invité
+	@Path("/decision")
+	@POST
+	public void decision(@QueryParam("b") boolean b, Invitation i){
+		System.out.println(b);
+		System.out.println(i.getDemandeur());
+		if(b)
+			i.setAccept(StatutInvit.ACCEPTEE);
+		else
+			i.setAccept(StatutInvit.REFUSEE);
+		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
+		iDAO.update(i);
 	}
 	
-	public void refusInvit(Invitation i){
-		
-	}
+	
 	
 	//On supprime l'invit du côté de celui qui a fait la demande
+	//Dans la partie iOS on envoie que le demandeur et l'invité
 	@Path("/supprInvit")
 	@POST
 	public boolean supprInvit(Invitation i){

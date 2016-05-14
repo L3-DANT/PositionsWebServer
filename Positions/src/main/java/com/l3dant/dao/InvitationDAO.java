@@ -1,12 +1,8 @@
 package com.l3dant.dao;
 
 import static com.mongodb.client.model.Filters.eq;
-import static java.util.Arrays.asList;
 import org.bson.Document;
-
 import com.l3dant.bean.Invitation;
-import com.l3dant.bean.Utilisateur;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 
 public class InvitationDAO implements DAO<Invitation>{
@@ -43,26 +39,6 @@ public class InvitationDAO implements DAO<Invitation>{
 				)		
 		);
 		
-		/*
-		DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
-		BasicDBObject match = new BasicDBObject();
-		
-		Utilisateur demandeur = uDAO.find(i.getDemandeur());
-		match.put("_id", demandeur.getId());
-		
-		BasicDBObject dbo = new BasicDBObject();
-		dbo.put("demandeur", i.getDemandeur());
-		dbo.put("concerne", i.getConcerne());
-		dbo.put("date", i.getDate());
-		dbo.put("accept", i.getAccept());
-		
-		BasicDBObject update = new BasicDBObject();
-		update.put("$push", new BasicDBObject("invits", dbo));
-		
-		collUser.updateOne(match, dbo);*/
-		
-		
-		
 		collUser.findOneAndUpdate(
 				eq("pseudo", i.getConcerne()),
 				new Document("$push", new Document("invits", new Document("demandeur", i.getDemandeur())
@@ -76,34 +52,55 @@ public class InvitationDAO implements DAO<Invitation>{
 
 		return i;
 	}
-
+	
+	
+	//On supprime du côté de l'invité et on met à jour l'invitation du côté demandeur
 	@Override
-	public Invitation update(Invitation t) {
-		/*collUser.findOneAndUpdate(
-				eq("pseudo", t.getDemandeur()),
-				new Document("$set", new Document("demandeur", i.getDemandeur()))
-					.append("$set", new Document("concerne", i.getConcerne()))
-					.append("$set", new Document("date", i.getDate()))
-					.append("$set", new Document("mail", u.getMail()))
-					.append("$set", new Document("localisation", 
-										new Document("latitude", u.getLocalisation().getLatitude())
-										.append("longitude", u.getLocalisation().getLongitude())
-										.append("date", u.getLocalisation().getDate())
-										.append("heure", u.getLocalisation().getHeure())
-										)
+	public Invitation update(Invitation i) {
+		
+		//suppression côté invité
+		collUser.findOneAndUpdate(
+				eq("pseudo", i.getConcerne()),
+				new Document("$pull", new Document("invits", new Document("demandeur", i.getDemandeur())
+						.append("concerne", i.getConcerne())
 					)
-        );
+				)			
+		);
 		
-		insertOne(
-				new Document()
-                .append("demandeur", i.getDemandeur())
-                .append("concerne", i.getConcerne())
-                .append("date", i.getDate())
-                .append("accept", i.getAccept())
-                );
+		//update côté demandeur => pour notifs
+		//degueulasse mais on a pas le choix, on doit avancer
+		collUser.findOneAndUpdate(
+				eq("pseudo", i.getDemandeur()),
+				new Document("$pull", new Document("invits", new Document("demandeur", i.getDemandeur())
+						.append("concerne", i.getConcerne())
+					)
+				)			
+		);
 		
-		return i;*/
-		return t;
+		collUser.findOneAndUpdate(
+				eq("pseudo", i.getDemandeur()),
+				new Document("$push", new Document("invits", new Document("demandeur", i.getDemandeur())
+						.append("concerne", i.getConcerne())
+						.append("date", i.getDate())
+						.append("accept", i.getAccept())
+						)					
+				)		
+		);
+		
+		/*
+		collUser.findOneAndUpdate(
+				eq("pseudo", i.getDemandeur()) , 
+				new Document("$set", new Document("invits", 
+									new Document("demandeur", i.getDemandeur())
+										.append("concerne", i.getConcerne())
+										.append("date", i.getDate())
+										.append("accept", i.getAccept())
+									)
+				)
+		);*/
+				
+	
+		return i;
 	}
 
 	@Override

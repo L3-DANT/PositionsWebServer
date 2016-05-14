@@ -30,10 +30,20 @@ public class Invitation {
 	public String getAccept() {
 		return accept.toString();
 	}
-
+	
+	public void setAccept(StatutInvit accept) {
+		this.accept = accept;
+	}
+	
 	public String getDate() {
 		return date;
 	}
+	
+	public void setDate(String date){
+		this.date = date;
+	}
+
+	
 	
 	
 }

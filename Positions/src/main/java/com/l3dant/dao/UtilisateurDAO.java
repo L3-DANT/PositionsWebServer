@@ -1,10 +1,6 @@
 package com.l3dant.dao;
 
-
-
 import org.bson.Document;
-
-import com.l3dant.bean.Invitation;
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.client.FindIterable;
