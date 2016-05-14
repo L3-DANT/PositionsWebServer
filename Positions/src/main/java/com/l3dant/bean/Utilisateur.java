@@ -92,7 +92,11 @@ public class Utilisateur {
 		this.contacts = contacts;
 	}
 
-
+	public String toString(){
+		return "[pseudo : " + this.pseudo + "]" ;
+	}
+	
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
