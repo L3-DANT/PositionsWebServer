@@ -131,4 +131,10 @@ public class UtilisateurService {
 			"attachment; filename=image_from_server.png");
 		return response.build();
 	}
+	
+	@POST
+	@Path("/shareLocation")
+	public boolean shareLocation(Utilisateur u){
+		return ((UtilisateurDAO)uDAO).shareLocation(u);
+	}
 }
