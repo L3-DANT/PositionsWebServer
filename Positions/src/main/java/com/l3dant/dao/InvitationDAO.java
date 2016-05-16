@@ -2,6 +2,7 @@ package com.l3dant.dao;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
@@ -22,10 +23,29 @@ public class InvitationDAO implements DAO<Invitation>{
 	public Invitation find(String name) {
 		return null;
 	}
+
+	public List<Invitation> getInvits(String pseudo) {
+		FindIterable<Document> result = collUser.find(eq("pseudo", pseudo));
+		List<Invitation> invitations= new ArrayList<Invitation>();
+		for(Document document : result){
+			for(Document d : (List<Document>)(document.get("invits"))){
+				Invitation i = new Invitation();
+				System.out.println("document :" + d);
+				System.out.println("dema,deur :" +  d.getString("demandeur"));
+				i.setDemandeur(d.getString("demandeur"));
+				i.setConcerne(d.getString("concerne"));
+				i.setDate(d.getString("date"));
+				i.setAccept(d.getString("accept"));
+				invitations.add(i);
+			}
+		}
+		System.out.println(invitations);
+		return invitations;
+	}
+	
 	
 	//pour vérifier si l'invitation n'existe pas déjà, renvoie true si elle existe déjà
 	public boolean find(String demandeur, String concerne) {
-		System.out.println(demandeur);
 		FindIterable<Document> result = collUser.find(eq("pseudo", demandeur));
 		Document document = result.first();
 		

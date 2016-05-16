@@ -2,14 +2,16 @@ package com.l3dant.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import com.google.gson.Gson;
 import com.l3dant.bean.Invitation;
-import com.l3dant.bean.StatutInvit;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
 import com.l3dant.dao.InvitationDAO;
@@ -40,19 +42,26 @@ public class InvitationService {
 	//Dans la partie iOS on envoie que le demandeur et l'invité
 	@Path("/decision")
 	@POST
-	public void decision(@QueryParam("b") boolean b, Invitation i){
-		System.out.println(b);
-		System.out.println(i.getDemandeur());
+	public boolean decision(@QueryParam("b") boolean b, Invitation i){
+		if(!((InvitationDAO)iDAO).find(i.getDemandeur(), i.getConcerne()))
+			return false;
+		
 		if(b)
 			//i.setAccept(StatutInvit.ACCEPTEE);
 			i.setAccept("ACCEPTEE");
 		else
 			//i.setAccept(StatutInvit.REFUSEE);
-			i.setAccept("REFUSEE");//
+			i.setAccept("REFUSEE");
 		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		iDAO.update(i);
+		return true;
 	}
 	
+	@Path("/recupInvits")
+	@POST
+	public String getInvits(@QueryParam("pseudo") String pseudo){
+		return new Gson().toJson(((InvitationDAO)iDAO).getInvits(pseudo)); //nécessaire?
+	}
 	
 	
 	//On supprime l'invit du côté de celui qui a fait la demande
@@ -63,5 +72,7 @@ public class InvitationService {
 		iDAO.delete(i);
 		return true;
 	}
+	
+	
 	
 }
