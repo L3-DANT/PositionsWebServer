@@ -11,6 +11,7 @@ public class Utilisateur {
 	private Localisation localisation;
 	private List<Utilisateur> contacts;
 	private String token;
+	private boolean shareLocation;
 	
 	public String getNom() {
 		return nom;
@@ -82,7 +83,14 @@ public class Utilisateur {
 		return "[pseudo : " + this.pseudo + "]" ;
 	}
 	
-	
+	public boolean isShareLocation() {
+		return shareLocation;
+	}
+
+	public void setShareLocation(boolean shareLocation) {
+		this.shareLocation = shareLocation;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

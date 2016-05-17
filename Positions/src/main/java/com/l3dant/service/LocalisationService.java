@@ -27,10 +27,10 @@ public class LocalisationService {
 	
 	@POST
 	@Path("/updateLoc")
-	public boolean updateLocalisation(Utilisateur u){
-		((LocalisationDAO)lDAO).update(u.getLocalisation(), u.getPseudo());
+	public boolean updateLocalisation(Contact c){
+		((LocalisationDAO)lDAO).update(c.getLoc(), c.getPseudo());
 		
-		Contact contact = new Contact(u.getPseudo(), u.getLocalisation());
+		Contact contact = new Contact(c.getPseudo(), c.getLoc());
 		
 		//paramètres pusher
 		String APP_KEY = "f145cb57089f977c5857";

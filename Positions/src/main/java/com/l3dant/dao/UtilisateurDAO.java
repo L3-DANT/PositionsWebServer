@@ -41,6 +41,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		ut.setPseudo(document.getString("pseudo"));
 		ut.setMotDePasse(document.getString("motDePasse"));
 		ut.setMail(document.getString("mail"));
+		ut.setShareLocation(document.getBoolean("shareLocation"));
 		
 		Document doc = (Document) document.get("localisation");
 
@@ -93,7 +94,8 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("mail", u.getMail())
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
-                .append("contacts", null)
+                .append("contacts", new ArrayList<>())
+                .append("shareLocation", true)
                 .append("localisation", new Document().append("latitude", 0.0)
                 									  .append("longitude", 0.0)
                 									  .append("date", "")
@@ -111,6 +113,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 					.append("$set", new Document("prenom", u.getPrenom()))
 					.append("$set", new Document("motDePasse", u.getMotDePasse()))
 					.append("$set", new Document("mail", u.getMail()))
+					.append("$set", new Document("shareLocation", u.isShareLocation()))
 					.append("$set", new Document("localisation", 
 										new Document("latitude", u.getLocalisation().getLatitude())
 										.append("longitude", u.getLocalisation().getLongitude())
@@ -126,6 +129,13 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 	@Override
 	public boolean delete(Utilisateur u) {
 		collUtilisateurs.deleteOne(eq("pseudo", u.getPseudo()));
+		return true;
+	}
+	
+	public boolean shareLocation(Utilisateur u){
+		collUtilisateurs.findOneAndUpdate(
+				eq("pseudo", u.getPseudo()),
+				new Document("$set", new Document("shareLocation", u.isShareLocation())));
 		return true;
 	}
 	
