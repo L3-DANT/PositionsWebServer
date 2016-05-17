@@ -2,6 +2,7 @@ package com.l3dant.bean;
 
 
 public class Contact {
+
 	private String pseudo;
 	private Localisation loc;
 	

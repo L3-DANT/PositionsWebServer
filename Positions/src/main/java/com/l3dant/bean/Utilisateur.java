@@ -2,14 +2,19 @@ package com.l3dant.bean;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 public class Utilisateur {
+	private ObjectId id;
+	
 	private String nom;
 	private String prenom;
 	private String mail;
 	private String pseudo;
 	private String motDePasse;
 	private Localisation localisation;
-	private List<Utilisateur> contacts;
+	private List<Contact> contacts;
+	private List<Invitation> invits;
 	private String token;
 	private boolean shareLocation;
 	
@@ -20,6 +25,15 @@ public class Utilisateur {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+	
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
+	}
+
 	
 	public String getPrenom() {
 		return prenom;
@@ -70,12 +84,12 @@ public class Utilisateur {
 	}
 	
 	
-	public List<Utilisateur> getContacts() {
+	public List<Contact> getContacts() {
 		return contacts;
 	}
 
 
-	public void setContacts(List<Utilisateur> contacts) {
+	public void setContacts(List<Contact> contacts) {
 		this.contacts = contacts;
 	}
 
@@ -89,6 +103,14 @@ public class Utilisateur {
 
 	public void setShareLocation(boolean shareLocation) {
 		this.shareLocation = shareLocation;
+	}
+	
+	public List<Invitation> getInvits() {
+		return invits;
+	}
+
+	public void setInvits(List<Invitation> invits) {
+		this.invits = invits;
 	}
 
 	@Override
