@@ -16,5 +16,9 @@ public class Contact {
 		return pseudo;
 	}
 
+	public Localisation getLoc() {
+		return loc;
+	}
+
 	
 }
