@@ -17,5 +17,20 @@ public class Contact {
 		return pseudo;
 	}
 
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+	public Localisation getLoc() {
+		return loc;
+	}
+
+	public void setLoc(Localisation loc) {
+		this.loc = loc;
+	}
+	
+
+
 	
 }

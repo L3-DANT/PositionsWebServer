@@ -22,6 +22,15 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		collUtilisateurs = ConnexionMongo.getDatabase().getCollection("utilisateurs");
 	}
 	
+	//si existe renvoie true
+	public boolean doExist(String pseudo) {
+		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", pseudo));
+		Document document = result.first();
+
+		return document != null;
+	}
+	
+	
 	@Override
 	public Utilisateur find(String name) {
 		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", name));
@@ -97,7 +106,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("mail", u.getMail())
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
-                .append("contacts", null)
+                .append("contacts", new ArrayList<>())
                 .append("invits", new ArrayList<>())
                 .append("localisation", new Document().append("latitude", 0.0)
                 									  .append("longitude", 0.0)
