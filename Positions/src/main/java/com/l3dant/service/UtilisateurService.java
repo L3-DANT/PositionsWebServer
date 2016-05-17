@@ -17,8 +17,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.l3dant.bean.*;
@@ -75,20 +73,15 @@ public class UtilisateurService {
 	}
 	
 	
-	@POST
-	@Path("/testLoc")
-	public boolean test(Localisation u){
+	@GET
+	@Path("/test")
+	public boolean test(){
 		System.out.println("testLoc");
-		System.out.println("lat : " + u.getLatitude() + ", long : "+ u.getLongitude());
 		
 		return true;
 	}
 	
-	@GET
-	@Path("/test")
-	public String test(){
-		return "test ok";
-	}
+	
 	
 	@POST
 	@Path("/uploadImg")

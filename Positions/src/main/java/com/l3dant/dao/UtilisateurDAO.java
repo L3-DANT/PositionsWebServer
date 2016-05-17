@@ -1,22 +1,17 @@
 package com.l3dant.dao;
 
-
-
 import org.bson.Document;
 
+import com.l3dant.bean.Invitation;
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-
-
 import static com.mongodb.client.model.Filters.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 
 public class UtilisateurDAO implements DAO<Utilisateur>{
@@ -36,17 +31,26 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		}
 
 		Utilisateur ut = new Utilisateur();
+		ut.setId(document.getObjectId("_id"));
 		ut.setNom(document.getString("nom"));
 		ut.setPrenom(document.getString("prenom"));
 		ut.setPseudo(document.getString("pseudo"));
 		ut.setMotDePasse(document.getString("motDePasse"));
 		ut.setMail(document.getString("mail"));
-		
+		/*List<Invitation> invitations= new ArrayList<Invitation>();
+		for(Document d : (List<Document>)document.get("invits")){
+			Invitation i = new Invitation();
+			i.setDemandeur(d.getString("demandeur"));
+			i.setConcerne(d.getString("concerne"));
+			i.setDate(d.getString("date"));
+			//i.setAccept(d.getString("accept"));
+			invitations.add(i);
+		}
+		ut.setInvits(invitations);*/
 		Document doc = (Document) document.get("localisation");
 
 		if(doc != null){
 			Localisation loc = new Localisation();
-
 			loc.setLongitude(doc.getDouble("longitude"));
 			loc.setLatitude(doc.getDouble("latitude"));
 			loc.setDate(doc.getString("date"));
@@ -94,10 +98,12 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
                 .append("motDePasse", u.getMotDePasse())
                 .append("token", u.getToken())
                 .append("contacts", null)
+                .append("invits", new ArrayList<>())
                 .append("localisation", new Document().append("latitude", 0.0)
                 									  .append("longitude", 0.0)
                 									  .append("date", "")
                 									  .append("heure", ""))
+
                 );
 		
 		return u;

@@ -17,7 +17,7 @@ public class ConnexionMongo {
 	// Some doc here about the Holder : http://thecodersbreakfast.net/index.php?post/2008/02/25/26-de-la-bonne-implementation-du-singleton-en-java
 	private static class Init {
 		//private static final MongoDatabase mongoDatabase = new MongoClient(new MongoClientURI(uri)).getDatabase("positions");
-		private static final MongoDatabase mongoDatabase = new MongoClient(uri).getDatabase("positions");
+		private static final MongoDatabase mongoDatabase = new MongoClient(uri).getDatabase("Positions");
 
 	}
 	
