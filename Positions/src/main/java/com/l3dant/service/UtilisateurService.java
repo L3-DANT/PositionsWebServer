@@ -33,16 +33,17 @@ public class UtilisateurService {
 	
 	@POST
 	@Path("/inscription")
-	public boolean inscription(Utilisateur u){
+	public Utilisateur inscription(Utilisateur u){
 		System.out.println("inscription");
 		
 		Utilisateur ut = uDAO.find(u.getPseudo());
 		if(ut == null){
 			u.setToken(RandomStringUtils.random(32, true, true));
 			uDAO.create(u);
-			return true;
+			u.setMotDePasse("");
+			return u;
 		}
-		return false;
+		return null;
 	}
 	
 	@POST
@@ -50,7 +51,7 @@ public class UtilisateurService {
 	public Utilisateur connexion(Utilisateur u){
 		System.out.println("connexion");
 		Utilisateur ut = uDAO.find(u.getPseudo());
-		return ut; //ut peut être null
+		return ut;
 	}
 	
 	@POST
