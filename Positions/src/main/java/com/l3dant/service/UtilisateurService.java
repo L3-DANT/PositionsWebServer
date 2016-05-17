@@ -85,7 +85,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/uploadImg")
 	@Consumes("*/*")
-	public void uploadImg(InputStream is, String pseudo){
+	public boolean uploadImg(InputStream is, String pseudo){
 		System.out.println("uploadImg");
 		//byte[] image = IOUtils.toByteArray(is);
 		String fileLocation = "d://ImagesPositions/" + pseudo + ".png";
@@ -94,6 +94,7 @@ public class UtilisateurService {
 	        objFile.delete();
 	    }
 		saveToFile(is, fileLocation);
+		return true;
 	}
 	
 	private void saveToFile(InputStream is, String fileLocation) {
