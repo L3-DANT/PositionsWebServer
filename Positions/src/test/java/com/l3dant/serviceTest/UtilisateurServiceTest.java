@@ -2,6 +2,8 @@ package com.l3dant.serviceTest;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,14 +17,11 @@ import com.l3dant.service.UtilisateurService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UtilisateurServiceTest {
-/*
+
 	@Mock
-<<<<<<< HEAD
 	UtilisateurDAO uDAO;
 	
 	private UtilisateurService us;
-=======
->>>>>>> f550d450295e63d44ca932ecfcdb84297b01e1a1
 	private Utilisateur u;
 	
 	@Before
@@ -40,48 +39,85 @@ public class UtilisateurServiceTest {
 	@Test
 	public void testInscription_true(){
 		//comportement des méthodes de utilisateurDAO appelées dans la méthode testée
-		Mockito.when(uDAO.find(u)).thenReturn(null);
-		Mockito.when(uDAO.create(u)).thenReturn(true);
+		Mockito.when(uDAO.find(u.getPseudo())).thenReturn(null);
+		Mockito.when(uDAO.create(u)).thenReturn(u);
 		
 		//appel de la méthode de UtilisateurService
-		boolean b = us.inscription(u);
+		Utilisateur ut = us.inscription(u);
 		
 		//tests
-		assertTrue(b);
+		assertTrue(ut.getPseudo().equals("pseudoTest"));
 	}
+	
 	
 	@Test
 	public void testInscription_false(){
-		Mockito.when(uDAO.find(u)).thenReturn(u);
-		Mockito.when(uDAO.create(u)).thenReturn(false);
+		Mockito.when(uDAO.find(u.getPseudo())).thenReturn(u);
+		Mockito.when(uDAO.create(u)).thenReturn(u);
 		
-		boolean b = us.inscription(u);
-		
-		assertFalse(b);
+		Utilisateur ut = us.inscription(u);
+
+		assertTrue(ut == null);
 	}
 	
 	
 	@Test
 	public void testConnexion_true(){
-		Mockito.when(uDAO.find(u)).thenReturn(u);
+		Mockito.when(uDAO.find(u.getPseudo())).thenReturn(u);
 		
-		boolean b = us.connexion(u);
-		
-		assertTrue(b);
+		Utilisateur ut = us.connexion(u);
+
+		assertTrue(ut.equals("pseudoTest"));
 	}
+	
 	
 	@Test
 	public void testConnexion_false(){
 		u.setMotDePasse("mdpIncorrect");
 		
-		Mockito.when(uDAO.find(u)).thenReturn(null);
+		Mockito.when(uDAO.find(u.getPseudo())).thenReturn(null);
 		
-		boolean b = us.connexion(u);
-		
-		assertFalse(b);
+		Utilisateur ut = us.connexion(u);
+
+		assertTrue(ut == null);
 		u.setMotDePasse("motDePasseTest");
 	}
-	*/
+	
+	
+	@Test
+	public void testRechercheUsers_find(){
+		List<Utilisateur> uts = us.rechercheUsers("pseudo");
+		
+		assertTrue(uts.size() != 0);
+	}
+	
+	@Test
+	public void testRechercheUsers_noNothing(){
+		List<Utilisateur> uts = us.rechercheUsers("vbdgs");
+		
+		assertTrue(uts.size() == 0);
+	}
+	
+	
+	@Test
+	public void testSupprimerCompte(){
+		us.supprimerCompte(u);
+		
+		Utilisateur ut = uDAO.find(u.getPseudo());
+		assertTrue(ut == null);
+	}
+	
+	
+	@Test
+	public void testShareLocation(){
+		u.setShareLocation(false);
+		
+		us.shareLocation(u);
+		
+		Utilisateur ut = uDAO.find(u.getPseudo());
+		assertTrue(ut.isShareLocation() == false);
+	}
+	
 	/* NE PAS SUPPRIMER CETTE METHODE
 	public void simulationCLient(){
 		String getUrl = "http://localhost:8080/Positions/utilisateur/test";
@@ -92,7 +128,5 @@ public class UtilisateurServiceTest {
         System.out.println(value);
         response.close();
 	}*/
-
-	
 
 }
