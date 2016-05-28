@@ -15,11 +15,14 @@ import com.l3dant.service.UtilisateurService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UtilisateurServiceTest {
-
+/*
 	@Mock
+<<<<<<< HEAD
 	UtilisateurDAO uDAO;
 	
 	private UtilisateurService us;
+=======
+>>>>>>> f550d450295e63d44ca932ecfcdb84297b01e1a1
 	private Utilisateur u;
 	
 	@Before
@@ -78,7 +81,7 @@ public class UtilisateurServiceTest {
 		assertFalse(b);
 		u.setMotDePasse("motDePasseTest");
 	}
-	
+	*/
 	/* NE PAS SUPPRIMER CETTE METHODE
 	public void simulationCLient(){
 		String getUrl = "http://localhost:8080/Positions/utilisateur/test";
