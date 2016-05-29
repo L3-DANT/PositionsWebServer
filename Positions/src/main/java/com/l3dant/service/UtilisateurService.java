@@ -50,7 +50,7 @@ public class UtilisateurService {
 	public Utilisateur connexion(Utilisateur u){
 		System.out.println("connexion");
 		Utilisateur ut = uDAO.find(u.getPseudo());
-		if(ut.getMotDePasse().equals(u.getMotDePasse())){
+		if(ut != null && ut.getMotDePasse().equals(u.getMotDePasse())){
 			ut.setMotDePasse("");
 			return ut;
 		}
