@@ -1,7 +1,5 @@
 package com.l3dant.service;
 
-
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -51,7 +50,11 @@ public class UtilisateurService {
 	public Utilisateur connexion(Utilisateur u){
 		System.out.println("connexion");
 		Utilisateur ut = uDAO.find(u.getPseudo());
-		return ut;
+		if(ut != null && ut.getMotDePasse().equals(u.getMotDePasse())){
+			ut.setMotDePasse("");
+			return ut;
+		}
+		return null;
 	}
 	
 	@POST
@@ -86,15 +89,16 @@ public class UtilisateurService {
 	@POST
 	@Path("/uploadImg")
 	@Consumes("*/*")
-	public void uploadImg(InputStream is){
+	public boolean uploadImg(InputStream is, String pseudo){
 		System.out.println("uploadImg");
 		//byte[] image = IOUtils.toByteArray(is);
-		String fileLocation = "d://uploadedImage/test.png";
+		String fileLocation = "/home/sebastien/Documents/ImagesPositions/" + pseudo + ".png";
 		File objFile = new File(fileLocation);
 		if(objFile.exists()) {
 	        objFile.delete();
 	    }
 		saveToFile(is, fileLocation);
+		return true;
 	}
 	
 	private void saveToFile(InputStream is, String fileLocation) {
@@ -116,12 +120,26 @@ public class UtilisateurService {
 	
 	@GET
 	@Path("/downloadImg")
-	public Response downloadImg(){
-		File file = new File("d:\\uc.png");
+	public Response downloadImg(@QueryParam("pseudo") String pseudo){
+		System.out.println("downloadImg");
+		String chemin = "/home/sebastien/Documents/ImagesPositions/";
+		String nomFichier = pseudo + ".png";
+		File file = new File(chemin + nomFichier);
 
+		if(!file.exists()) {
+			nomFichier = "noPhoto.png";
+			file = new File(chemin + nomFichier);
+	    }
+		
 		ResponseBuilder response = Response.ok((Object) file);
-		response.header("Content-Disposition",
-			"attachment; filename=image_from_server.png");
+		response.header("Content-Disposition", "attachment; filename=" + nomFichier);
+		
 		return response.build();
+	}
+	
+	@POST
+	@Path("/shareLocation")
+	public boolean shareLocation(Utilisateur u){
+		return ((UtilisateurDAO)uDAO).shareLocation(u);
 	}
 }

@@ -1,10 +1,6 @@
 package com.l3dant.service;
 
-import java.nio.channels.Channel;
-import java.util.Collections;
-
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,13 +20,13 @@ import com.pusher.rest.data.Result;
 public class LocalisationService {
 	
 	private static DAO<Localisation> lDAO = DAOFactory.getLocalisationDAO();
+	private static DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
 	
 	@POST
 	@Path("/updateLoc")
-	public boolean updateLocalisation(Utilisateur u){
-		((LocalisationDAO)lDAO).update(u.getLocalisation(), u.getPseudo());
-		
-		Contact contact = new Contact(u.getPseudo(), u.getLocalisation());
+	public boolean updateLocalisation(Contact c){
+		System.out.println("updateLoc");
+		Contact contact = new Contact(c.getPseudo(), c.getLoc());
 		
 		//paramètres pusher
 		String APP_KEY = "f145cb57089f977c5857";
@@ -40,7 +36,13 @@ public class LocalisationService {
 		Pusher pusher = new Pusher(APP_ID, APP_KEY, APP_SECRET);
 		pusher.setCluster("eu");
 		pusher.setEncrypted(false);
-		Result r = pusher.trigger(contact.getPseudo(), "update", contact);
+		
+		Utilisateur u = uDAO.find(c.getPseudo());
+		Result r = null;
+		if(u.isShareLocation()){
+			((LocalisationDAO)lDAO).update(c.getLoc(), c.getPseudo());
+			r = pusher.trigger(contact.getPseudo(), "update", contact);
+		}
 		
 		System.out.println(r.getMessage());
 		return true;

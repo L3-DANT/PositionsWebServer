@@ -16,6 +16,7 @@ public class Utilisateur {
 	private List<String> contacts;
 	private List<Invitation> invits;
 	private String token;
+	private boolean shareLocation;
 	
 	public String getNom() {
 		return nom;
@@ -96,6 +97,13 @@ public class Utilisateur {
 		return "[pseudo : " + this.pseudo + "]" ;
 	}
 	
+	public boolean isShareLocation() {
+		return shareLocation;
+	}
+
+	public void setShareLocation(boolean shareLocation) {
+		this.shareLocation = shareLocation;
+	}
 	
 	public List<Invitation> getInvits() {
 		return invits;

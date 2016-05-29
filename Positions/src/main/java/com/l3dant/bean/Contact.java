@@ -18,6 +18,7 @@ public class Contact {
 	}
 
 
+
 	public void setPseudo(String pseudo) {
 		this.pseudo = pseudo;
 	}
@@ -30,7 +31,5 @@ public class Contact {
 		this.loc = loc;
 	}
 	
-
-
 	
 }
