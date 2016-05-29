@@ -45,7 +45,7 @@ public class ContactDAO implements DAO<Contact>{
 	}
 		
 		
-	//A test
+
 	public boolean create(String demandeur, String concerne) {
 		collUser.findOneAndUpdate(
 				eq("pseudo", demandeur),
@@ -67,9 +67,21 @@ public class ContactDAO implements DAO<Contact>{
 	}
 
 	@Override
-	public boolean delete(Contact t) {
+	public boolean delete(Contact c) {
 		
-		return false;
+		return true;
 	}
-
+	
+	public boolean delete(String pseudo, String exAmi) {
+		collUser.findOneAndUpdate(
+				eq("pseudo", pseudo),
+				new Document("$pull", new Document("contacts", new Document("pseudo", exAmi)))		
+		);
+		
+		collUser.findOneAndUpdate(
+				eq("pseudo", exAmi),
+				new Document("$pull", new Document("contacts", new Document("pseudo", pseudo)))		
+		);
+		return true;
+	}
 }
