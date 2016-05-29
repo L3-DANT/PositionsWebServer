@@ -37,6 +37,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		ut.setPseudo(document.getString("pseudo"));
 		ut.setMotDePasse(document.getString("motDePasse"));
 		ut.setMail(document.getString("mail"));
+		ut.setToken(document.getString("token"));
 		ut.setShareLocation(document.getBoolean("shareLocation"));
 		
 		/*List<Invitation> invitations= new ArrayList<Invitation>();
