@@ -25,6 +25,7 @@ public class LocalisationService {
 	@POST
 	@Path("/updateLoc")
 	public boolean updateLocalisation(Contact c){
+		System.out.println("updateLoc");
 		Contact contact = new Contact(c.getPseudo(), c.getLoc());
 		
 		//paramètres pusher
