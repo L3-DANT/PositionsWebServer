@@ -89,15 +89,16 @@ public class UtilisateurService {
 	@POST
 	@Path("/uploadImg")
 	@Consumes("*/*")
-	public void uploadImg(InputStream is, String pseudo){
+	public boolean uploadImg(InputStream is, String pseudo){
 		System.out.println("uploadImg");
 		//byte[] image = IOUtils.toByteArray(is);
-		String fileLocation = "d://ImagesPositions/" + pseudo + ".png";
+		String fileLocation = "/home/sebastien/Documents/ImagesPositions/" + pseudo + ".png";
 		File objFile = new File(fileLocation);
 		if(objFile.exists()) {
 	        objFile.delete();
 	    }
 		saveToFile(is, fileLocation);
+		return true;
 	}
 	
 	private void saveToFile(InputStream is, String fileLocation) {
@@ -121,7 +122,7 @@ public class UtilisateurService {
 	@Path("/downloadImg")
 	public Response downloadImg(@QueryParam("pseudo") String pseudo){
 		System.out.println("downloadImg");
-		String chemin = "d://ImagesPositions/";
+		String chemin = "/home/sebastien/Documents/ImagesPositions/";
 		String nomFichier = pseudo + ".png";
 		File file = new File(chemin + nomFichier);
 
