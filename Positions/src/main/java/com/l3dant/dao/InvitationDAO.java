@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.bson.Document;
 import com.l3dant.bean.Invitation;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 public class InvitationDAO implements DAO<Invitation>{
 	
 	private final MongoCollection<Document> collUser; //On récupère la collection concernant les users parce que toutes les interactions vont s'effectuer sur la liste d'invit du user
+	
 	
 	public InvitationDAO() {
 		collUser = ConnexionMongo.getDatabase().getCollection("utilisateurs");
@@ -30,8 +30,6 @@ public class InvitationDAO implements DAO<Invitation>{
 		for(Document document : result){
 			for(Document d : (List<Document>)(document.get("invits"))){
 				Invitation i = new Invitation();
-				System.out.println("document :" + d);
-				System.out.println("dema,deur :" +  d.getString("demandeur"));
 				i.setDemandeur(d.getString("demandeur"));
 				i.setConcerne(d.getString("concerne"));
 				i.setDate(d.getString("date"));
@@ -39,7 +37,6 @@ public class InvitationDAO implements DAO<Invitation>{
 				invitations.add(i);
 			}
 		}
-		System.out.println(invitations);
 		return invitations;
 	}
 	
@@ -52,7 +49,23 @@ public class InvitationDAO implements DAO<Invitation>{
 		//On récupère les invitations sous forme de liste de document
 		List<Document> invitations = (List<Document>)document.get("invits");
 		for(Document invitation : invitations){
+			
 			if(invitation.get("concerne").toString().compareTo(concerne) == 0)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean findWithoutAccept(String demandeur, String concerne) {
+		FindIterable<Document> result = collUser.find(eq("pseudo", demandeur));
+		Document document = result.first();
+		
+		//On récupère les invitations sous forme de liste de document
+		List<Document> invitations = (List<Document>)document.get("invits");
+		for(Document invitation : invitations){
+			
+			if(invitation.get("concerne").toString().compareTo(concerne) == 0 && invitation.getString("accept").equals("EN_ATTENTE"))
 				return true;
 		}
 		

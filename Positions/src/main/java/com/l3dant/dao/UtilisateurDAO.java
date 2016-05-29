@@ -22,6 +22,15 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		collUtilisateurs = ConnexionMongo.getDatabase().getCollection("utilisateurs");
 	}
 	
+	//si existe renvoie true
+	public boolean doExist(String pseudo) {
+		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", pseudo));
+		Document document = result.first();
+
+		return document != null;
+	}
+	
+	
 	@Override
 	public Utilisateur find(String name) {
 		FindIterable<Document> result = collUtilisateurs.find(eq("pseudo", name));

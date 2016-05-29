@@ -13,7 +13,7 @@ public class Utilisateur {
 	private String pseudo;
 	private String motDePasse;
 	private Localisation localisation;
-	private List<Contact> contacts;
+	private List<String> contacts;
 	private List<Invitation> invits;
 	private String token;
 	private boolean shareLocation;
@@ -84,12 +84,12 @@ public class Utilisateur {
 	}
 	
 	
-	public List<Contact> getContacts() {
+	public List<String> getContacts() {
 		return contacts;
 	}
 
 
-	public void setContacts(List<Contact> contacts) {
+	public void setContacts(List<String> contacts) {
 		this.contacts = contacts;
 	}
 
