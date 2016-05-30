@@ -49,6 +49,7 @@ public class InvitationService {
 	@Path("/decision")
 	@POST
 	public boolean decision(@QueryParam("b") boolean b, Invitation i){
+		System.out.println("decision-b:"+b);
 		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		
 		if(!((InvitationDAO)iDAO).findWithoutAccept(i.getDemandeur(), i.getConcerne()) ) //on veut savoir si l'invitation existe et est en attente
