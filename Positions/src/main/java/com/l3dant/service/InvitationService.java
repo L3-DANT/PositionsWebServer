@@ -49,6 +49,8 @@ public class InvitationService {
 	@Path("/decision")
 	@POST
 	public boolean decision(@QueryParam("b") boolean b, Invitation i){
+		System.out.println("decision-b:"+b);
+		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		
 		if(!((InvitationDAO)iDAO).findWithoutAccept(i.getDemandeur(), i.getConcerne()) ) //on veut savoir si l'invitation existe et est en attente
 			return false;
@@ -56,12 +58,13 @@ public class InvitationService {
 		if(b){
 			//i.setAccept(StatutInvit.ACCEPTEE);
 			i.setAccept("ACCEPTEE");
+			iDAO.update(i);
 			return ContactService.addAmi(i.getDemandeur(), i.getConcerne());
 		}	
 		else
 			//i.setAccept(StatutInvit.REFUSEE);
 			i.setAccept("REFUSEE");
-		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
+		
 		iDAO.update(i);
 		
 		return false;
