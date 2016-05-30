@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -59,10 +60,20 @@ public class UtilisateurService {
 	
 	@POST
 	@Path("/recherche")
-	@Consumes("text/plain")
 	@Produces("application/json")
-	public List<Utilisateur> rechercheUsers(String prefix){
-		return ((UtilisateurDAO)uDAO).findViaPrefix(prefix);
+	public List<String> rechercheUsers(@QueryParam("prefix") String prefix){
+		System.out.println("rechercheUsers");
+		if(prefix.equals("")){
+			return null;
+		}
+		
+		List<Utilisateur> uts = ((UtilisateurDAO)uDAO).findViaPrefix(prefix);
+		
+		List<String> l = new ArrayList<String>();
+		for(int i = 0; i < uts.size(); i++){
+			l.add(uts.get(i).getPseudo());
+		}
+		return l;
 	}
 	
 	
