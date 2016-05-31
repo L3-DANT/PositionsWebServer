@@ -2,6 +2,7 @@ package com.l3dant.dao;
 
 import org.bson.Document;
 
+import com.l3dant.bean.Contact;
 import com.l3dant.bean.Invitation;
 import com.l3dant.bean.Localisation;
 import com.l3dant.bean.Utilisateur;
@@ -12,6 +13,10 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 
 
 public class UtilisateurDAO implements DAO<Utilisateur>{
@@ -48,6 +53,16 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		ut.setMail(document.getString("mail"));
 		ut.setToken(document.getString("token"));
 		ut.setShareLocation(document.getBoolean("shareLocation"));
+		
+		
+		List<String> contacts = new ArrayList<String>();
+		for(Document doc : result){
+			for(Document d : (List<Document>)(doc.get("contacts"))){
+				contacts.add(d.getString("pseudo"));
+			}
+		}
+		
+		ut.setContacts(contacts);
 		
 		/*List<Invitation> invitations= new ArrayList<Invitation>();
 		for(Document d : (List<Document>)document.get("invits")){
@@ -142,6 +157,7 @@ public class UtilisateurDAO implements DAO<Utilisateur>{
 		
 		return u;
 	}
+	
 
 	@Override
 	public boolean delete(Utilisateur u) {

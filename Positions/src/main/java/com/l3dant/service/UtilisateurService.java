@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import com.google.gson.Gson;
 import com.l3dant.bean.*;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
@@ -50,7 +51,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/connexion")
 	public Utilisateur connexion(Utilisateur u){
-		System.out.println("connexion");
+		System.out.println("connexion - pseudo:" + u.getPseudo());
 		Utilisateur ut = uDAO.find(u.getPseudo());
 		if(ut != null && ut.getMotDePasse().equals(u.getMotDePasse())){
 			ut.setMotDePasse("");
@@ -59,11 +60,37 @@ public class UtilisateurService {
 		return null;
 	}
 	
+
+	@Path("/getFriends")
+	@POST
+	public String getFriends(@QueryParam("pseudo") String pseudo){
+		System.out.println("getFriends - pseudo:" + pseudo);
+		
+		Utilisateur u;
+		try{
+			u = uDAO.find(pseudo);
+		}catch(NullPointerException e){
+			u = null;
+		}
+
+		List<Contact> contacts = new ArrayList<Contact>();
+		if(u!= null && u.getContacts() != null){
+			for(int i = 0; i < u.getContacts().size();i++){
+				Contact c = new Contact();
+				c.setPseudo(u.getContacts().get(i));
+				c.setLoc(u.getLocalisation());
+				contacts.add(c);
+			}
+		}
+		
+		return new Gson().toJson(contacts);
+	}
+	
 	@POST
 	@Path("/recherche")
 	@Produces("application/json")
 	public List<String> rechercheUsers(@QueryParam("prefix") String prefix){
-		System.out.println("rechercheUsers");
+		System.out.println("rechercheUsers - prefix:" + prefix);
 		if(prefix.equals("")){
 			return null;
 		}
@@ -149,7 +176,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/shareLocation")
 	public boolean shareLocation(Utilisateur u){
-		System.out.println("shareLocation");
+		System.out.println("shareLocation - " + u.getPseudo());
 		return ((UtilisateurDAO)uDAO).shareLocation(u);
 	}
 }

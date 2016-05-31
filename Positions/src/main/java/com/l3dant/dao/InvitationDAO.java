@@ -159,9 +159,9 @@ public class InvitationDAO implements DAO<Invitation>{
 				new Document("$pull", new Document("invits", new Document("demandeur", i.getDemandeur())
 						.append("concerne", i.getConcerne())
 					)
-				)			
+				)
 		);
-		return false;
+		return true;
 	}
 
 }

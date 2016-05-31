@@ -2,8 +2,10 @@ package com.l3dant.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,12 +29,14 @@ public class InvitationService {
 	private static DAO<Contact> cDAO = DAOFactory.getContactDAO();
 	private static DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
 	
+	
 	//Méthode pour ajouter une invitation
 	//return l'id de l'invitation
 	@Path("/inviteFriend")
 	@POST
 	public Invitation inviterAmi(@QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
-		System.out.println("inviterAmi");
+		System.out.println("inviterAmi - dem:" + demandeur + " - conc:" + concerne);
+		
 		String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 		Invitation i = new Invitation(demandeur, concerne, date);
 		
@@ -49,36 +53,46 @@ public class InvitationService {
 	//Dans la partie iOS on envoie que le demandeur et l'invité
 	@Path("/decision")
 	@POST
-	public boolean decision(@QueryParam("b") boolean b, @QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
-		System.out.println("decision-b:"+b);
+	public Contact decision(@QueryParam("b") boolean b, @QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
+		System.out.println("decision - b:" + b + " - dem:" + demandeur + " - conc:" + concerne);
+		
 		Invitation i = new Invitation();
 		i.setDemandeur(demandeur);
 		i.setConcerne(concerne);
-		
 		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		
-		if(!((InvitationDAO)iDAO).findWithoutAccept(i.getDemandeur(), i.getConcerne()) ) //on veut savoir si l'invitation existe et est en attente
-			return false;
+		 //on veut savoir si l'invitation existe et est en attente
+		if(!((InvitationDAO)iDAO).findWithoutAccept(i.getDemandeur(), i.getConcerne()) ){
+			System.out.println("invitation déjà existante");
+			return null;
+		}
 		
 		if(b){
+			System.out.println("accepté");
 			//i.setAccept(StatutInvit.ACCEPTEE);
 			i.setAccept("ACCEPTEE");
 			iDAO.update(i);
 			return ContactService.addAmi(i.getDemandeur(), i.getConcerne());
 		}	
-		else
+		else {
+			System.out.println("refusé");
 			//i.setAccept(StatutInvit.REFUSEE);
 			i.setAccept("REFUSEE");
+		}
 		
 		iDAO.update(i);
 		
-		return false;
+		return null;
 	}
 	
 	@Path("/recupInvits")
 	@POST
 	public String getInvits(@QueryParam("pseudo") String pseudo){
-		return new Gson().toJson(((InvitationDAO)iDAO).getInvits(pseudo)); //nécessaire?
+		System.out.println("recupInvits - pseudo:" + pseudo);
+		List<Invitation> is = ((InvitationDAO)iDAO).getInvits(pseudo);
+		System.out.println("nb invit : " + is.size());
+		
+		return new Gson().toJson(is); //nécessaire?
 	}
 	
 	
@@ -86,9 +100,18 @@ public class InvitationService {
 	//Dans la partie iOS on envoie que le demandeur et l'invité
 	@Path("/supprInvit")
 	@POST
-	public boolean supprInvit(Invitation i){
+	public Contact supprInvit(Invitation i){
+		System.out.println("supprInvit - conc:" + i.getConcerne() + " - dem:" + i.getDemandeur());
 		iDAO.delete(i);
-		return true;
+		
+		Utilisateur u = uDAO.find(i.getConcerne());
+		Contact c = new Contact();
+		c.setPseudo(u.getPseudo());
+		c.setLoc(u.getLocalisation());
+		
+		System.out.println("pseudo:"+c.getPseudo() + "-lng:" +c.getLoc().getLongitude());
+		
+		return c;
 	}
 	
 	
