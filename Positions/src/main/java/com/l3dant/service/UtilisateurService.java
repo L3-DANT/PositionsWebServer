@@ -50,7 +50,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/connexion")
 	public Utilisateur connexion(Utilisateur u){
-		System.out.println("connexion");
+		System.out.println("connexion - pseudo:" + u.getPseudo());
 		Utilisateur ut = uDAO.find(u.getPseudo());
 		if(ut != null && ut.getMotDePasse().equals(u.getMotDePasse())){
 			ut.setMotDePasse("");
@@ -63,7 +63,7 @@ public class UtilisateurService {
 	@Path("/recherche")
 	@Produces("application/json")
 	public List<String> rechercheUsers(@QueryParam("prefix") String prefix){
-		System.out.println("rechercheUsers");
+		System.out.println("rechercheUsers - prefix:" + prefix);
 		if(prefix.equals("")){
 			return null;
 		}
@@ -149,7 +149,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/shareLocation")
 	public boolean shareLocation(Utilisateur u){
-		System.out.println("shareLocation");
+		System.out.println("shareLocation - " + u.getPseudo());
 		return ((UtilisateurDAO)uDAO).shareLocation(u);
 	}
 }
