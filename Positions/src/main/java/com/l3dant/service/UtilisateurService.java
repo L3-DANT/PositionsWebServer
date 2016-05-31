@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -79,8 +80,6 @@ public class UtilisateurService {
 	
 	@DELETE
 	@Path("/suppression")
-	@Consumes("application/json")
-	@Produces("application/json")
 	public boolean supprimerCompte(Utilisateur u){
 		System.out.println("supprimer");
 		return uDAO.delete(u);
@@ -89,10 +88,9 @@ public class UtilisateurService {
 	
 	@GET
 	@Path("/test")
-	public boolean test(){
-		System.out.println("testLoc");
-		
-		return true;
+	public String testConnexion(){
+		System.out.println("testConnexion");
+		return new Date().toString();
 	}
 	
 	
@@ -151,6 +149,7 @@ public class UtilisateurService {
 	@POST
 	@Path("/shareLocation")
 	public boolean shareLocation(Utilisateur u){
+		System.out.println("shareLocation");
 		return ((UtilisateurDAO)uDAO).shareLocation(u);
 	}
 }

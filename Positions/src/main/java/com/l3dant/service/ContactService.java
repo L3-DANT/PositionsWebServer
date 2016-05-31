@@ -24,6 +24,7 @@ public class ContactService {
 	private static DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
 	
 	public static boolean addAmi(String demandeur, String concerne){ //Invitation invit
+		System.out.println("addAmi");
 		if(uDAO.find(demandeur) == null || uDAO.find(concerne) == null || ((ContactDAO)cDAO).find(demandeur,concerne))
 			return false;
 		
