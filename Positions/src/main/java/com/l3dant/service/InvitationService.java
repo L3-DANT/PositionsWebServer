@@ -32,6 +32,7 @@ public class InvitationService {
 	@Path("/inviteFriend")
 	@POST
 	public Invitation inviterAmi(@QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
+		System.out.println("inviterAmi");
 		String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 		Invitation i = new Invitation(demandeur, concerne, date);
 		
@@ -48,8 +49,12 @@ public class InvitationService {
 	//Dans la partie iOS on envoie que le demandeur et l'invité
 	@Path("/decision")
 	@POST
-	public boolean decision(@QueryParam("b") boolean b, Invitation i){
+	public boolean decision(@QueryParam("b") boolean b, @QueryParam("demandeur") String demandeur, @QueryParam("concerne") String concerne){
 		System.out.println("decision-b:"+b);
+		Invitation i = new Invitation();
+		i.setDemandeur(demandeur);
+		i.setConcerne(concerne);
+		
 		i.setDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		
 		if(!((InvitationDAO)iDAO).findWithoutAccept(i.getDemandeur(), i.getConcerne()) ) //on veut savoir si l'invitation existe et est en attente
