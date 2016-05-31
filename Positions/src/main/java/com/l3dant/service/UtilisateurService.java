@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import com.google.gson.Gson;
 import com.l3dant.bean.*;
 import com.l3dant.dao.DAO;
 import com.l3dant.dao.DAOFactory;
@@ -61,8 +62,8 @@ public class UtilisateurService {
 	
 
 	@Path("/getFriends")
-	@GET
-	public List<Contact> getFriends(@QueryParam("pseudo") String pseudo){
+	@POST
+	public String getFriends(@QueryParam("pseudo") String pseudo){
 		System.out.println("getFriends - pseudo:" + pseudo);
 		
 		Utilisateur u;
@@ -82,7 +83,7 @@ public class UtilisateurService {
 			}
 		}
 		
-		return contacts;
+		return new Gson().toJson(contacts);
 	}
 	
 	@POST
