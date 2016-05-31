@@ -76,9 +76,10 @@ public class UtilisateurService {
 		List<Contact> contacts = new ArrayList<Contact>();
 		if(u!= null && u.getContacts() != null){
 			for(int i = 0; i < u.getContacts().size();i++){
+				Utilisateur ut = uDAO.find(u.getContacts().get(i));
 				Contact c = new Contact();
-				c.setPseudo(u.getContacts().get(i));
-				c.setLoc(u.getLocalisation());
+				c.setPseudo(ut.getPseudo());
+				c.setLoc(ut.getLocalisation());
 				contacts.add(c);
 			}
 		}
