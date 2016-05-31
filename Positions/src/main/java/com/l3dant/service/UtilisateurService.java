@@ -59,6 +59,32 @@ public class UtilisateurService {
 		return null;
 	}
 	
+
+	@Path("/getFriends")
+	@GET
+	public List<Contact> getFriends(@QueryParam("pseudo") String pseudo){
+		System.out.println("getFriends - pseudo:" + pseudo);
+		
+		Utilisateur u;
+		try{
+			u = uDAO.find(pseudo);
+		}catch(NullPointerException e){
+			u = null;
+		}
+
+		List<Contact> contacts = new ArrayList<Contact>();
+		if(u!= null && u.getContacts() != null){
+			for(int i = 0; i < u.getContacts().size();i++){
+				Contact c = new Contact();
+				c.setPseudo(u.getContacts().get(i));
+				c.setLoc(u.getLocalisation());
+				contacts.add(c);
+			}
+		}
+		
+		return contacts;
+	}
+	
 	@POST
 	@Path("/recherche")
 	@Produces("application/json")

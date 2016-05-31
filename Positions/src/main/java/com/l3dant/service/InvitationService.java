@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -27,6 +28,7 @@ public class InvitationService {
 	private static DAO<Invitation> iDAO = DAOFactory.getInvitationDAO();
 	private static DAO<Contact> cDAO = DAOFactory.getContactDAO();
 	private static DAO<Utilisateur> uDAO = DAOFactory.getUtilisateurDAO();
+	
 	
 	//Méthode pour ajouter une invitation
 	//return l'id de l'invitation
