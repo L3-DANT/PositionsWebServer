@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -60,6 +62,18 @@ public class UtilisateurService {
 		return null;
 	}
 	
+	@POST
+	@Path("/connexionWithToken")
+	public Utilisateur connexionWithToken(Utilisateur u){
+		System.out.println("connexion - pseudo:" + u.getPseudo());
+		Utilisateur ut = uDAO.find(u.getPseudo());
+		if(ut != null && ut.getToken().equals(u.getToken())){
+			ut.setMotDePasse("");
+			return ut;
+		}
+		return null;
+	}
+	
 
 	@Path("/getFriends")
 	@POST
@@ -76,9 +90,10 @@ public class UtilisateurService {
 		List<Contact> contacts = new ArrayList<Contact>();
 		if(u!= null && u.getContacts() != null){
 			for(int i = 0; i < u.getContacts().size();i++){
+				Utilisateur ut = uDAO.find(u.getContacts().get(i));
 				Contact c = new Contact();
-				c.setPseudo(u.getContacts().get(i));
-				c.setLoc(u.getLocalisation());
+				c.setPseudo(ut.getPseudo());
+				c.setLoc(ut.getLocalisation());
 				contacts.add(c);
 			}
 		}
@@ -178,5 +193,21 @@ public class UtilisateurService {
 	public boolean shareLocation(Utilisateur u){
 		System.out.println("shareLocation - " + u.getPseudo());
 		return ((UtilisateurDAO)uDAO).shareLocation(u);
+	}
+	
+	@GET
+	@Path("/mail")
+	public boolean sendMail(){
+		System.out.println("sendMail");
+		try {
+			Mail.generateAndSendEmail("duchenne.sebastien@gmail.com");
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 }
