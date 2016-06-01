@@ -45,7 +45,7 @@ public class LocalisationService {
 			r = pusher.trigger(contact.getPseudo(), "update", contact);
 		}
 		
-		System.out.println(r.getMessage());
+		//System.out.println(r.getMessage());
 		return true;
 	}
 	

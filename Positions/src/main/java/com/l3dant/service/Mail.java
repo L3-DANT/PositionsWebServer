@@ -48,7 +48,7 @@ public class Mail {
  
 		// Enter your correct gmail UserID and Password
 		// if you have 2FA enabled then provide App Specific Password
-		transport.connect("smtp.mail.yahoo.com", "upmccfa", "DANT2016");
+		transport.connect("smtp.mail.yahoo.com", "upmccfa@yahoo.fr", "DANT2016");
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 		transport.close();
 	}

@@ -185,7 +185,7 @@ public class UtilisateurService {
 	
 	@GET
 	@Path("/mail")
-	public boolean senMail(){
+	public boolean sendMail(){
 		System.out.println("sendMail");
 		try {
 			Mail.generateAndSendEmail("duchenne.sebastien@gmail.com");
