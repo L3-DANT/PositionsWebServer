@@ -62,6 +62,18 @@ public class UtilisateurService {
 		return null;
 	}
 	
+	@POST
+	@Path("/connexionWithToken")
+	public Utilisateur connexionWithToken(Utilisateur u){
+		System.out.println("connexion - pseudo:" + u.getPseudo());
+		Utilisateur ut = uDAO.find(u.getPseudo());
+		if(ut != null && ut.getToken().equals(u.getToken())){
+			ut.setMotDePasse("");
+			return ut;
+		}
+		return null;
+	}
+	
 
 	@Path("/getFriends")
 	@POST
