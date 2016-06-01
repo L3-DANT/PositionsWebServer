@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -179,5 +181,21 @@ public class UtilisateurService {
 	public boolean shareLocation(Utilisateur u){
 		System.out.println("shareLocation - " + u.getPseudo());
 		return ((UtilisateurDAO)uDAO).shareLocation(u);
+	}
+	
+	@GET
+	@Path("/mail")
+	public boolean senMail(){
+		System.out.println("sendMail");
+		try {
+			Mail.generateAndSendEmail("duchenne.sebastien@gmail.com");
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 }

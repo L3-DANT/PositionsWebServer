@@ -2,68 +2,56 @@ package com.l3dant.service;
 
 import java.util.Properties;
 
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Mail {
 	
 	
-	public static void sendMessage(String subject, String text, String destinataire, String copyDest) { 
-		String SMTP_HOST1 = null;
-		String LOGIN_SMTP1 = null;
-		String IMAP_ACCOUNT1 = null;
-		String PASSWORD_SMTP1 = null;
-		
-		
-	    // 1 -> Création de la session 
-	    Properties properties = new Properties(); 
-	    properties.setProperty("mail.transport.protocol", "smtp"); 
-	    properties.setProperty("mail.smtp.host", SMTP_HOST1); 
-	    properties.setProperty("mail.smtp.user", LOGIN_SMTP1); 
-	    properties.setProperty("mail.from", IMAP_ACCOUNT1); 
-	    
-	    // pour les connexions sécurisé comme gmail
-	    properties.setProperty("mail.smtp.starttls.enable", "true"); 
-	    Session session = Session.getInstance(properties); 
-	 
-	    // 2 -> Création du message 
-	    MimeMessage message = new MimeMessage(session); 
-	    try { 
-	        message.setText(text); 
-	        message.setSubject(subject); 
-	        message.addRecipients(Message.RecipientType.TO, destinataire); 
-	        message.addRecipients(Message.RecipientType.CC, copyDest); 
-	    } catch (MessagingException e) { 
-	        e.printStackTrace(); 
-	    }
-	    
-	    // 3 -> Envoi du message 
-	    Transport transport = null;
-	    try { 
-	        transport = session.getTransport("smtp"); 
-	        transport.connect(LOGIN_SMTP1, PASSWORD_SMTP1); 
-	        transport.sendMessage(message, new Address[] { new InternetAddress(destinataire), 
-	                                                        new InternetAddress(copyDest) }); 
-	    } catch (MessagingException e) { 
-	        e.printStackTrace(); 
-	    } finally { 
-	        try { 
-	            if (transport != null) { 
-	                transport.close(); 
-	            } 
-	        } catch (MessagingException e) { 
-	            e.printStackTrace(); 
-	        } 
-	    } 
-	    
-	    
-	    
-	} 
+	static Properties mailServerProperties;
+	static Session getMailSession;
+	static MimeMessage generateMailMessage;
+ 
+	public static void main(String args[]) throws AddressException, MessagingException {
+		//generateAndSendEmail();
+		System.out.println("\n\n ===> Your Java Program has just sent an Email successfully. Check your email..");
+	}
+ 
+	public static void generateAndSendEmail(String email) throws AddressException, MessagingException {
+ 
+		// Step1
+		System.out.println("\n 1st ===> setup Mail Server Properties..");
+		mailServerProperties = System.getProperties();
+		mailServerProperties.put("mail.smtp.port", "587");
+		mailServerProperties.put("mail.smtp.auth", "true");
+		mailServerProperties.put("mail.smtp.starttls.enable", "true");
+		System.out.println("Mail Server Properties have been setup successfully..");
+ 
+		// Step2
+		System.out.println("\n\n 2nd ===> get Mail Session..");
+		getMailSession = Session.getDefaultInstance(mailServerProperties, null);
+		generateMailMessage = new MimeMessage(getMailSession);
+		generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+		generateMailMessage.setSubject("Greetings from Crunchify..");
+		String emailBody = "Test email by Crunchify.com JavaMail API example. " + "<br><br> Regards, <br>Crunchify Admin";
+		generateMailMessage.setContent(emailBody, "text/html");
+		System.out.println("Mail Session has been created successfully..");
+ 
+		// Step3
+		System.out.println("\n\n 3rd ===> Get Session and Send mail");
+		Transport transport = getMailSession.getTransport("smtp");
+ 
+		// Enter your correct gmail UserID and Password
+		// if you have 2FA enabled then provide App Specific Password
+		transport.connect("smtp.mail.yahoo.com", "upmccfa", "DANT2016");
+		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
+		transport.close();
+	}
 	
 	
 	
